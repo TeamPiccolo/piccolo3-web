@@ -1,0 +1,4 @@
+include README.md
+include COPYING
+include piccolo2.yml
+include ChangeLog

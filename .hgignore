@@ -1,0 +1,10 @@
+#use global syntax
+syntax: glob
+
+*.pyc
+*.spyproject
+
+build
+dist
+*.egg-info
+*.eggs
