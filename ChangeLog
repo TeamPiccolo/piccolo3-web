@@ -1,6 +1,18 @@
+2018-10-08  Livia  <livia.jakob@gmx.ch>
+
+	* README.md:
+	Initial commit
+	[76d8b8da170a] [tip]
+
 2018-10-08  Livia Jakob  <livia.jakob@gmx.ch>
+
+	* .hgignore, COPYING, ChangeLog, MANIFEST.in, README.md~,
+	piccolo2.yml, piccolo2/__init__.py, piccolo2/app.py,
+	piccolo2/web/__init__.py, setup.py:
+	Initial setup of repository structure
+	[dff161e855bc]
 
 	* README.md:
 	Creating a new repository for the piccolo2 web interface
-	[edad5bf6a6ac] [tip]
+	[edad5bf6a6ac]
 
