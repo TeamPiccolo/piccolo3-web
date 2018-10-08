@@ -1,0 +1,1 @@
+This is *Piccolo 2 Web* by [Livia Jakob](https://bitbucket.org/liviaj/). It provides a graphical web interface for the Piccolo optical spectroradiometer. There are several related repositories: piccolo2-server, piccolo2-common and piccolo2-client.
