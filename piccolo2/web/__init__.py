@@ -22,4 +22,4 @@ except DistributionNotFound:
     # package is not installed
     pass
 
-#from PlayerApp import *
+from Piccolo import *

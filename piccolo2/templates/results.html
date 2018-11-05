@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block head %}
+
+{% endblock %}
+{% block content %}
+      <!--main content start-->
+      <section id="main-content">
+        <section class="wrapper">
+          <div class="row">
+            <div class="col-lg-12">
+              <h3 class="page-header"><i class="icon_piechart"></i> Results</h3>
+              <ol class="breadcrumb">
+                <!--This could be done automatically, but not worth the effort at this stage-->
+                <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+                <li><i class="icon_piechart"></i>Results</li>
+
+              </ol>
+            </div>
+          </div>
+          <div class="row">
+            <!-- results start -->
+            <div class="col-lg-12">
+              <section class="panel">
+                <header class="panel-heading">
+                  <h3>Results</h3>
+                      </header>
+                      <div class="panel-body">
+                        <div class="tab-pane" id="chartjs">
+                      <div class="row">
+
+                          <!-- Table -->
+                          <div class="col-lg-6">
+                              <section class="panel">
+                                  <header class="panel-heading">
+                                      Select a Result
+                                  </header>
+                                  <div class="panel-body">
+                                      <table class="table table-condensed table-hover">
+                                          <thead>
+                                            <tr>
+                                              <th>Jobs</th>
+                                              <th></th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            <tr>
+                                              <td>1</td>
+                                              <td>
+                                                Bla
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td>2</td>
+                                              <td>
+                                                Bla
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                  </div>
+                              </section>
+                          </div>
+                          <!-- End Table Component-->
+                        <!-- Chart -->
+                          <div class="col-lg-6">
+                              <section class="panel">
+                                  <header class="panel-heading">
+                                      Result Chart
+                                  </header>
+                                  <div class="panel-body text-center">
+                                      <canvas id="line" height="300" width="450"></canvas>
+                                  </div>
+                              </section>
+                          </div>
+
+                      </div>
+                  </div>
+                      </div>
+
+                    </section>
+              </div>
+            </div>
+      </section>
+      <!--main content end-->
+    </section>
+{% endblock %}
+
+
+{% block scripts %}
+<!-- javascripts -->
+<!-- chartjs -->
+<script src="{{ url_for('static', filename='js/chartjs/Chart.js') }}"></script>
+<!-- custom chart script for this page only-->
+<script src="{{ url_for('static', filename='js/chartjs-custom.js') }}"></script>
+{% endblock %}

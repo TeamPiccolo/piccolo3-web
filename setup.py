@@ -35,7 +35,7 @@ setup(
             'piccolo2-web = piccolo2.app:main',
         ],
     },
-    #cmdclass=cmdclass,
+    include_package_data=True,
 
     # metadata for upload to PyPI
     author = "Livia Jakob, Magnus Hagdorn, Alasdair MacArthur, Iain Robinson",

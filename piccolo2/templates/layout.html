@@ -1,0 +1,102 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Livia Jakob">
+<meta name="keyword" content="Piccolo, University, Edinburgh, Research">
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/favi.ico') }}" type="image/x-icon">
+
+<title>Piccolo2 - Dashboard</title>
+<!--external css-->
+
+<!-- Bootstrap CSS -->
+<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+<!-- bootstrap theme -->
+<link href="{{ url_for('static', filename='css/bootstrap-theme.css') }}" rel="stylesheet">
+<!-- font icon -->
+<link href="{{ url_for('static', filename='css/elegant-icons-style.css') }}" rel="stylesheet" />
+<link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet" />
+
+<!-- Date range picker -->
+<link href="{{ url_for('static', filename='css/daterangepicker.css') }}" rel="stylesheet" />
+<link href="{{ url_for('static', filename='css/bootstrap-datepicker.css') }}" rel="stylesheet" />
+
+  <!-- Custom CSS -->
+<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/style-responsive.css') }}" rel="stylesheet">
+
+
+{% block head %}{% endblock %}
+</head>
+
+
+<body>
+  <!-- container section start -->
+  <section id="container" class="">
+
+    <!--header start-->
+    <header class="header dark-bg">
+      <div class="toggle-nav">
+        <div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
+      </div>
+
+      <!--logo start-->
+      <a href="index.html" class="logo">Piccolo <span class="lite">2</span></a>
+      <!--logo end-->
+
+    </header>
+    <!--header end-->
+
+    <!--sidebar start-->
+    <aside>
+      <div id="sidebar" class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu">
+          <li {% if request.path == "/" %} class="active" {% endif %}>
+            <a class="" href="/">
+                          <i class="icon_house_alt"></i>
+                          <span>Dashboard</span>
+                      </a>
+          </li>
+          <li {% if request.path == "/results" %} class="active" {% endif %}>
+            <a class="" href="results">
+                          <i class="icon_piechart"></i>
+                          <span>Results</span>
+
+                      </a>
+          </li>
+
+        </ul>
+        <!-- sidebar menu end-->
+      </div>
+    </aside>
+    <!--sidebar end-->
+
+    {% block content %} {% endblock %}
+
+  </section>
+  <!-- container section start -->
+
+  <!-- javascripts -->
+
+  <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+  <!-- bootstrap -->
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+  <!-- nice scroll -->
+  <script src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}" type="text/javascript"></script>
+
+    <!--custom script for all pages-->
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <!--date picker-->
+  <script src="{{ url_for('static', filename='js/moment.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/daterangepicker.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap-datepicker.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/form-component.js') }}"></script>
+
+  {% block scripts %}
+  {% endblock %}
+
+</body>
+</html>
