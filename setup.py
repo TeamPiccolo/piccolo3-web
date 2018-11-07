@@ -29,6 +29,10 @@ setup(
         ],
     install_requires = [
         "piccolo2-client",
+        "numpy",
+        "flask",
+        "pytz",
+        "configobj",
     ],
     entry_points={
         'gui_scripts': [
