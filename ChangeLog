@@ -1,8 +1,265 @@
+2018-11-05  Livia Jakob  <livia.jakob@gmx.ch>
+
+	* MANIFEST.in, piccolo2/Piccolo Dashboard/.DS_Store, piccolo2/Piccolo
+	Dashboard/._.DS_Store, piccolo2/Piccolo Dashboard/._css,
+	piccolo2/Piccolo Dashboard/._fonts, piccolo2/Piccolo
+	Dashboard/._img, piccolo2/Piccolo Dashboard/._index.html,
+	piccolo2/Piccolo Dashboard/._js, piccolo2/Piccolo
+	Dashboard/._results.html, piccolo2/Piccolo Dashboard/css/.DS_Store,
+	piccolo2/Piccolo Dashboard/css/._.DS_Store, piccolo2/Piccolo
+	Dashboard/css/._bootstrap-datepicker.css, piccolo2/Piccolo
+	Dashboard/css/._bootstrap-theme.css, piccolo2/Piccolo
+	Dashboard/css/._bootstrap.min.css, piccolo2/Piccolo
+	Dashboard/css/._daterangepicker.css, piccolo2/Piccolo Dashboard/css
+	/._elegant-icons-style.css, piccolo2/Piccolo Dashboard/css/._font-
+	awesome.min.css, piccolo2/Piccolo Dashboard/css/._style-
+	responsive.css, piccolo2/Piccolo Dashboard/css/._style.css,
+	piccolo2/Piccolo Dashboard/css/bootstrap-datepicker.css,
+	piccolo2/Piccolo Dashboard/css/bootstrap-theme.css, piccolo2/Piccolo
+	Dashboard/css/bootstrap.min.css, piccolo2/Piccolo
+	Dashboard/css/daterangepicker.css, piccolo2/Piccolo Dashboard/css
+	/elegant-icons-style.css, piccolo2/Piccolo Dashboard/css/font-
+	awesome.min.css, piccolo2/Piccolo Dashboard/css/style-
+	responsive.css, piccolo2/Piccolo Dashboard/css/style.css,
+	piccolo2/Piccolo Dashboard/fonts/.DS_Store, piccolo2/Piccolo
+	Dashboard/fonts/._.DS_Store, piccolo2/Piccolo
+	Dashboard/fonts/._ElegantIcons.eot, piccolo2/Piccolo
+	Dashboard/fonts/._ElegantIcons.svg, piccolo2/Piccolo
+	Dashboard/fonts/._ElegantIcons.ttf, piccolo2/Piccolo
+	Dashboard/fonts/._ElegantIcons.woff, piccolo2/Piccolo
+	Dashboard/fonts/._FontAwesome.otf, piccolo2/Piccolo Dashboard/fonts
+	/._fontawesome-webfont.eot, piccolo2/Piccolo Dashboard/fonts
+	/._fontawesome-webfont.svg, piccolo2/Piccolo Dashboard/fonts
+	/._fontawesome-webfont.ttf, piccolo2/Piccolo Dashboard/fonts
+	/._fontawesome-webfont.woff, piccolo2/Piccolo Dashboard/fonts
+	/._glyphicons-halflings-regular.eot, piccolo2/Piccolo
+	Dashboard/fonts/._glyphicons-halflings-regular.svg, piccolo2/Piccolo
+	Dashboard/fonts/._glyphicons-halflings-regular.ttf, piccolo2/Piccolo
+	Dashboard/fonts/._glyphicons-halflings-regular.woff,
+	piccolo2/Piccolo Dashboard/fonts/ElegantIcons.eot, piccolo2/Piccolo
+	Dashboard/fonts/ElegantIcons.svg, piccolo2/Piccolo
+	Dashboard/fonts/ElegantIcons.ttf, piccolo2/Piccolo
+	Dashboard/fonts/ElegantIcons.woff, piccolo2/Piccolo
+	Dashboard/fonts/FontAwesome.otf, piccolo2/Piccolo Dashboard/fonts
+	/fontawesome-webfont.eot, piccolo2/Piccolo Dashboard/fonts
+	/fontawesome-webfont.svg, piccolo2/Piccolo Dashboard/fonts
+	/fontawesome-webfont.ttf, piccolo2/Piccolo Dashboard/fonts
+	/fontawesome-webfont.woff, piccolo2/Piccolo Dashboard/fonts
+	/glyphicons-halflings-regular.eot, piccolo2/Piccolo Dashboard/fonts
+	/glyphicons-halflings-regular.svg, piccolo2/Piccolo Dashboard/fonts
+	/glyphicons-halflings-regular.ttf, piccolo2/Piccolo Dashboard/fonts
+	/glyphicons-halflings-regular.woff, piccolo2/Piccolo
+	Dashboard/img/.DS_Store, piccolo2/Piccolo Dashboard/img/._.DS_Store,
+	piccolo2/Piccolo Dashboard/js/.DS_Store, piccolo2/Piccolo
+	Dashboard/js/._.DS_Store, piccolo2/Piccolo Dashboard/js/._bootstrap-
+	datepicker.js, piccolo2/Piccolo Dashboard/js/._bootstrap.min.js,
+	piccolo2/Piccolo Dashboard/js/._chartjs, piccolo2/Piccolo
+	Dashboard/js/._chartjs-custom.js, piccolo2/Piccolo
+	Dashboard/js/._daterangepicker.js, piccolo2/Piccolo Dashboard/js
+	/._form-component.js, piccolo2/Piccolo Dashboard/js/._jquery.js,
+	piccolo2/Piccolo Dashboard/js/._jquery.nicescroll.js,
+	piccolo2/Piccolo Dashboard/js/._moment.js, piccolo2/Piccolo
+	Dashboard/js/._scripts.js, piccolo2/Piccolo Dashboard/js/bootstrap-
+	datepicker.js, piccolo2/Piccolo Dashboard/js/bootstrap.min.js,
+	piccolo2/Piccolo Dashboard/js/chartjs-custom.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/._.gitignore, piccolo2/Piccolo
+	Dashboard/js/chartjs/._Chart.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/._Chart.min.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/._LICENSE.md, piccolo2/Piccolo
+	Dashboard/js/chartjs/._component.json, piccolo2/Piccolo
+	Dashboard/js/chartjs/._docs, piccolo2/Piccolo
+	Dashboard/js/chartjs/._readme.md, piccolo2/Piccolo
+	Dashboard/js/chartjs/._samples, piccolo2/Piccolo
+	Dashboard/js/chartjs/._site, piccolo2/Piccolo
+	Dashboard/js/chartjs/.gitignore, piccolo2/Piccolo
+	Dashboard/js/chartjs/Chart.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/Chart.min.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/LICENSE.md, piccolo2/Piccolo
+	Dashboard/js/chartjs/component.json, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/._Chart.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/._index.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/._prettify.css, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/._prettify.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/._prettify.less, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/._styles.css, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/._styles.less, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/Chart.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/index.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/prettify.css, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/prettify.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/prettify.less, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/styles.css, piccolo2/Piccolo
+	Dashboard/js/chartjs/docs/styles.less, piccolo2/Piccolo
+	Dashboard/js/chartjs/readme.md, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/._bar.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/._doughnut.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/._line.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/._pie.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/._polarArea.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/._radar.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/._sixup.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/bar.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/doughnut.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/line.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/pie.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/polarArea.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/radar.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/samples/sixup.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/._assets, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/._index.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/._styles.css, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/._6charts.png, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/._Chart.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/._effects.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/._excanvas.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/._html.png, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/._simple.png, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/6charts.png, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/Chart.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/effects.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/excanvas.js, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/html.png, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/assets/simple.png, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/index.html, piccolo2/Piccolo
+	Dashboard/js/chartjs/site/styles.css, piccolo2/Piccolo
+	Dashboard/js/daterangepicker.js, piccolo2/Piccolo Dashboard/js/form-
+	component.js, piccolo2/Piccolo Dashboard/js/jquery.js,
+	piccolo2/Piccolo Dashboard/js/jquery.nicescroll.js, piccolo2/Piccolo
+	Dashboard/js/moment.js, piccolo2/Piccolo Dashboard/js/scripts.js,
+	piccolo2/app.py, piccolo2/config.conf, piccolo2/definitions.py,
+	piccolo2/static/.DS_Store, piccolo2/static/._.DS_Store,
+	piccolo2/static/css/bootstrap-datepicker.css, piccolo2/static/css
+	/bootstrap-theme.css, piccolo2/static/css/bootstrap.min.css,
+	piccolo2/static/css/daterangepicker.css, piccolo2/static/css
+	/elegant-icons-style.css, piccolo2/static/css/font-awesome.min.css,
+	piccolo2/static/css/style-responsive.css,
+	piccolo2/static/css/style.css, piccolo2/static/fonts/.DS_Store,
+	piccolo2/static/fonts/._.DS_Store,
+	piccolo2/static/fonts/._ElegantIcons.eot,
+	piccolo2/static/fonts/._ElegantIcons.svg,
+	piccolo2/static/fonts/._ElegantIcons.ttf,
+	piccolo2/static/fonts/._ElegantIcons.woff,
+	piccolo2/static/fonts/._FontAwesome.otf, piccolo2/static/fonts
+	/._fontawesome-webfont.eot, piccolo2/static/fonts/._fontawesome-
+	webfont.svg, piccolo2/static/fonts/._fontawesome-webfont.ttf,
+	piccolo2/static/fonts/._fontawesome-webfont.woff,
+	piccolo2/static/fonts/._glyphicons-halflings-regular.eot,
+	piccolo2/static/fonts/._glyphicons-halflings-regular.svg,
+	piccolo2/static/fonts/._glyphicons-halflings-regular.ttf,
+	piccolo2/static/fonts/._glyphicons-halflings-regular.woff,
+	piccolo2/static/fonts/ElegantIcons.eot,
+	piccolo2/static/fonts/ElegantIcons.svg,
+	piccolo2/static/fonts/ElegantIcons.ttf,
+	piccolo2/static/fonts/ElegantIcons.woff,
+	piccolo2/static/fonts/FontAwesome.otf, piccolo2/static/fonts
+	/fontawesome-webfont.eot, piccolo2/static/fonts/fontawesome-
+	webfont.svg, piccolo2/static/fonts/fontawesome-webfont.ttf,
+	piccolo2/static/fonts/fontawesome-webfont.woff,
+	piccolo2/static/fonts/glyphicons-halflings-regular.eot,
+	piccolo2/static/fonts/glyphicons-halflings-regular.svg,
+	piccolo2/static/fonts/glyphicons-halflings-regular.ttf,
+	piccolo2/static/fonts/glyphicons-halflings-regular.woff,
+	piccolo2/static/img/download.png, piccolo2/static/img/download.svg,
+	piccolo2/static/img/favi.ico, piccolo2/static/img/filter.png,
+	piccolo2/static/img/info2.png, piccolo2/static/img/logo_ed.png,
+	piccolo2/static/img/refresh.png, piccolo2/static/js/.DS_Store,
+	piccolo2/static/js/._.DS_Store, piccolo2/static/js/._bootstrap-
+	datepicker.js, piccolo2/static/js/._bootstrap.min.js,
+	piccolo2/static/js/._chartjs, piccolo2/static/js/._chartjs-
+	custom.js, piccolo2/static/js/._daterangepicker.js,
+	piccolo2/static/js/._form-component.js,
+	piccolo2/static/js/._jquery.js,
+	piccolo2/static/js/._jquery.nicescroll.js,
+	piccolo2/static/js/._moment.js, piccolo2/static/js/._scripts.js,
+	piccolo2/static/js/bootstrap-datepicker.js,
+	piccolo2/static/js/bootstrap.min.js, piccolo2/static/js/chartjs-
+	custom.js, piccolo2/static/js/chartjs/._.gitignore,
+	piccolo2/static/js/chartjs/._Chart.js,
+	piccolo2/static/js/chartjs/._Chart.min.js,
+	piccolo2/static/js/chartjs/._LICENSE.md,
+	piccolo2/static/js/chartjs/._component.json,
+	piccolo2/static/js/chartjs/._docs,
+	piccolo2/static/js/chartjs/._readme.md,
+	piccolo2/static/js/chartjs/._samples,
+	piccolo2/static/js/chartjs/._site,
+	piccolo2/static/js/chartjs/.gitignore,
+	piccolo2/static/js/chartjs/Chart.js,
+	piccolo2/static/js/chartjs/Chart.min.js,
+	piccolo2/static/js/chartjs/LICENSE.md,
+	piccolo2/static/js/chartjs/component.json,
+	piccolo2/static/js/chartjs/docs/._Chart.js,
+	piccolo2/static/js/chartjs/docs/._index.html,
+	piccolo2/static/js/chartjs/docs/._prettify.css,
+	piccolo2/static/js/chartjs/docs/._prettify.js,
+	piccolo2/static/js/chartjs/docs/._prettify.less,
+	piccolo2/static/js/chartjs/docs/._styles.css,
+	piccolo2/static/js/chartjs/docs/._styles.less,
+	piccolo2/static/js/chartjs/docs/Chart.js,
+	piccolo2/static/js/chartjs/docs/index.html,
+	piccolo2/static/js/chartjs/docs/prettify.css,
+	piccolo2/static/js/chartjs/docs/prettify.js,
+	piccolo2/static/js/chartjs/docs/prettify.less,
+	piccolo2/static/js/chartjs/docs/styles.css,
+	piccolo2/static/js/chartjs/docs/styles.less,
+	piccolo2/static/js/chartjs/readme.md,
+	piccolo2/static/js/chartjs/samples/._bar.html,
+	piccolo2/static/js/chartjs/samples/._doughnut.html,
+	piccolo2/static/js/chartjs/samples/._line.html,
+	piccolo2/static/js/chartjs/samples/._pie.html,
+	piccolo2/static/js/chartjs/samples/._polarArea.html,
+	piccolo2/static/js/chartjs/samples/._radar.html,
+	piccolo2/static/js/chartjs/samples/._sixup.html,
+	piccolo2/static/js/chartjs/samples/bar.html,
+	piccolo2/static/js/chartjs/samples/doughnut.html,
+	piccolo2/static/js/chartjs/samples/line.html,
+	piccolo2/static/js/chartjs/samples/pie.html,
+	piccolo2/static/js/chartjs/samples/polarArea.html,
+	piccolo2/static/js/chartjs/samples/radar.html,
+	piccolo2/static/js/chartjs/samples/sixup.html,
+	piccolo2/static/js/chartjs/site/._assets,
+	piccolo2/static/js/chartjs/site/._index.html,
+	piccolo2/static/js/chartjs/site/._styles.css,
+	piccolo2/static/js/chartjs/site/assets/._6charts.png,
+	piccolo2/static/js/chartjs/site/assets/._Chart.js,
+	piccolo2/static/js/chartjs/site/assets/._effects.js,
+	piccolo2/static/js/chartjs/site/assets/._excanvas.js,
+	piccolo2/static/js/chartjs/site/assets/._html.png,
+	piccolo2/static/js/chartjs/site/assets/._simple.png,
+	piccolo2/static/js/chartjs/site/assets/6charts.png,
+	piccolo2/static/js/chartjs/site/assets/Chart.js,
+	piccolo2/static/js/chartjs/site/assets/effects.js,
+	piccolo2/static/js/chartjs/site/assets/excanvas.js,
+	piccolo2/static/js/chartjs/site/assets/html.png,
+	piccolo2/static/js/chartjs/site/assets/simple.png,
+	piccolo2/static/js/chartjs/site/index.html,
+	piccolo2/static/js/chartjs/site/styles.css,
+	piccolo2/static/js/daterangepicker.js, piccolo2/static/js/form-
+	component.js, piccolo2/static/js/jquery.js,
+	piccolo2/static/js/jquery.nicescroll.js,
+	piccolo2/static/js/moment.js, piccolo2/static/js/scripts.js,
+	piccolo2/templates/index.html, piccolo2/templates/layout.html,
+	piccolo2/templates/results.html, piccolo2/web/Piccolo.py,
+	piccolo2/web/__init__.py, setup.py:
+	added piccolo dashboard templates with flask
+	[59775dfab79d] [tip]
+
+2018-10-08  Livia  <livia.jakob@gmx.ch>
+
+	* README.md~:
+	README.md~ deleted
+	[03a4e1c25adf]
+
+2018-10-08  Livia Jakob  <livia.jakob@gmx.ch>
+
+	* ChangeLog:
+	refreshed ChangeLog
+	[14db33a5c274]
+
 2018-10-08  Livia  <livia.jakob@gmx.ch>
 
 	* README.md:
 	Initial commit
-	[76d8b8da170a] [tip]
+	[76d8b8da170a]
 
 2018-10-08  Livia Jakob  <livia.jakob@gmx.ch>
 
