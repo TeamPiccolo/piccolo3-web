@@ -1,3 +1,29 @@
+2018-11-14  Livia Jakob  <livia.jakob@gmx.ch>
+
+	* README.md~:
+	merged changes
+	[58b14f5a5ff4] [tip]
+
+	* ChangeLog:
+	updated
+	[6c934c28e9e3]
+
+2018-11-07  Magnus Hagdorn  <magnus.hagdorn@ed.ac.uk>
+
+	* setup.py:
+	specify dependencies
+	[dc7917375d38]
+
+2018-11-05  Livia  <livia.jakob@gmx.ch>
+
+	* piccolo2.yml:
+	piccolo2.yml added configobj
+	[0771c6bcea80]
+
+	* README.md~:
+	README.md~ deleted online with Bitbucket
+	[737d00149aa3]
+
 2018-11-05  Livia Jakob  <livia.jakob@gmx.ch>
 
 	* MANIFEST.in, piccolo2/Piccolo Dashboard/.DS_Store, piccolo2/Piccolo
@@ -241,7 +267,7 @@
 	piccolo2/templates/results.html, piccolo2/web/Piccolo.py,
 	piccolo2/web/__init__.py, setup.py:
 	added piccolo dashboard templates with flask
-	[59775dfab79d] [tip]
+	[59775dfab79d]
 
 2018-10-08  Livia  <livia.jakob@gmx.ch>
 

@@ -29,32 +29,47 @@ from piccolo2.web import __version__ as version
 #from QuietTime import QuietTimeDialog
 #from RunList import RunListDialog
 #from SpectraList import SpectraListDialog
-import datetime,pytz
+#import datetime,pytz
 
 TIMEFORMAT = "%Y-%m-%dT%H:%M:%S"
 
-'''class IntegrationTimes(QtGui.QStandardItemModel):
-    def __init__(self,*args,**keywords):
-
-        QtGui.QStandardItemModel.__init__(self,*args,**keywords)
-
+class IntegrationTimes():
+    def __init__(self):
         self._shutters = None
         self._spectrometers = None
         self._piccolo = None
         self._listenerID = None
         self._updatePiccolo = True
 
-        self.itemChanged.connect(self.updateIntegrationTime)
+        #self.itemChanged.connect(self.updateIntegrationTime)
 
-    def updateIntegrationTime(self,index):
+    
+    @property
+    def shutters(self):
+        return self._shutters
+    
+    @property
+    def spectrometers(self):
+        return self._spectrometers
+    
+    
+    
+    def updateIntegrationTime(self, column, row, value):
+        '''Updates an integration time value
+        
+        :param column: column of the value that should be updated
+        :param row: row of the value that should be updated
+        :param value: new value
+        
+        '''
         try:
-            data = float(index.text())
+            data = float(value)
         except:
-            index.setForeground(QtGui.QBrush(QtGui.QColor('red')))
+            #TODO: handle case with Exception
             return
         if self._updatePiccolo:
-            shutter = self._shutters[index.column()]
-            spectrometer = self._spectrometers[index.row()]
+            shutter = self._shutters[column]
+            spectrometer = self._spectrometers[row]
             if shutter == 'min':
                 self._piccolo.setMinIntegrationTime(spectrometer=spectrometer,milliseconds=data)
             elif shutter == 'max':
@@ -65,47 +80,56 @@ TIMEFORMAT = "%Y-%m-%dT%H:%M:%S"
                                                  milliseconds=data)
 
 
-    def updateIntegrationTimeDisplay(self,spectrometer,shutter):
-        j = self._spectrometers.index(spectrometer)
-        i = self._shutters.index(shutter)
-        source = 0
+    def getIntegrationTime(self,spectrometer,shutter):
+        #j = self._spectrometers.index(spectrometer)
+        #i = self._shutters.index(shutter)
+        #source = 0
         if shutter == 'min':
             data = self._piccolo.getMinIntegrationTime(spectrometer=spectrometer)
         elif shutter == 'max':
             data = self._piccolo.getMaxIntegrationTime(spectrometer=spectrometer)
         else:
-            data   = self._piccolo.getIntegrationTime(shutter=shutter,
-                                                      spectrometer=spectrometer)
-            source = self._piccolo.getIntegrationTimeSource(shutter=shutter,
-                                                            spectrometer=spectrometer)
-        self._updatePiccolo = False
-        item = QtGui.QStandardItem(str(data))
-        if source == 0:
-            item.setForeground(QtGui.QBrush(QtGui.QColor('black')))
-        elif source == 1:
-            item.setForeground(QtGui.QBrush(QtGui.QColor('green')))
-        elif source == 2:
-            item.setForeground(QtGui.QBrush(QtGui.QColor('blue')))
-        self.setItem(j,i,item)
-        self._updatePiccolo = True
+            data = int(self._piccolo.getIntegrationTime(shutter=shutter, spectrometer=spectrometer))
+            #source = self._piccolo.getIntegrationTimeSource(shutter=shutter,spectrometer=spectrometer)
+        #self._updatePiccolo = False
+        #item = QtGui.QStandardItem(str(data))
+        #if source == 0:
+            #item.setForeground(QtGui.QBrush(QtGui.QColor('black')))
+        #elif source == 1:
+            #item.setForeground(QtGui.QBrush(QtGui.QColor('green')))
+        #elif source == 2:
+            #item.setForeground(QtGui.QBrush(QtGui.QColor('blue')))
+        #self.setItem(j,i,item)
+        #self._updatePiccolo = True
+        return data
             
     def piccoloConnect(self,piccolo):
         self._piccolo = piccolo
         self._shutters = ['min']+self._piccolo.getShutterList()+['max']
         self._spectrometers = self._piccolo.getSpectrometerList()
 
-        self.setRowCount(len(self._spectrometers))
-        self.setColumnCount(len(self._shutters))
+        #self.setRowCount(len(self._spectrometers))
+        #self.setColumnCount(len(self._shutters))
 
-        for i in range(len(self._shutters)):
-            self.setHorizontalHeaderItem(i,QtGui.QStandardItem(self._shutters[i]))
-        for j in range(len(self._spectrometers)):
-            self.setVerticalHeaderItem(j,QtGui.QStandardItem(self._spectrometers[j]))
+        #for i in range(len(self._shutters)):
+            #self.setHorizontalHeaderItem(i,QtGui.QStandardItem(self._shutters[i]))
+        #for j in range(len(self._spectrometers)):
+            #self.setVerticalHeaderItem(j,QtGui.QStandardItem(self._spectrometers[j]))
 
+
+    def getIntegrationTimes(self):
+        integrationTimes = {}
+        integrationTimes['shutters'] = self._shutters
+        integrationTimes['spectrometers'] = self._spectrometers
+        integrationTimes['values'] = []
         for spectrometer in self._spectrometers:
+            col = []
             for shutter in self._shutters:
-                self.updateIntegrationTimeDisplay(spectrometer,shutter)
-'''
+                val = self.getIntegrationTime(spectrometer,shutter)
+                col.append(val)
+            integrationTimes['values'].append(col)
+        return integrationTimes
+        
 
 
 '''class ConnectDialog():
@@ -171,7 +195,7 @@ class WebApp():
         #self.syncTimeButton.clicked.connect(self.syncTime)
 
         # the integration times
-        #self._times = IntegrationTimes()
+        self._times = IntegrationTimes()
         #self.integrationTimeView.setModel(self._times)
 
         # connect recording buttons
@@ -184,7 +208,8 @@ class WebApp():
         #self.selectRunButton.clicked.connect(self.setRun)
         
         # connect spectra load boxes
-        self._spectraList = {}
+        self._spectraList = []
+        self._runList = []
         self._updateSpectraFile = True
         self._spectra = None
         self._selectedDirection = None
@@ -220,7 +245,7 @@ class WebApp():
 
         # hook up current run
         #self.outputDir.editingFinished.connect(self.changeCurrentRun)
-        self.currentRun = None
+        #self.currentRun = None
         
         # periodically check status
         #self.statusLabel = QtGui.QLabel()
@@ -234,15 +259,15 @@ class WebApp():
         #self.timer.start(1000)
 
         
-    def closeEvent(self,event):
+    '''def closeEvent(self,event):
         if self._piccolo is not None:
             self._piccolo.disconnect()
         
     def syncTime(self):
         now = datetime.datetime.now(tz=pytz.utc)
-        self._piccolo.piccolo.setClock(clock=now.isoformat())
+        self._piccolo.piccolo.setClock(clock=now.isoformat())'''
 
-    def disableEdit(self):
+    '''def disableEdit(self):
         #self.integrationTimeView.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         # current run
         self.checkAutoIntegrate.setEnabled(False)
@@ -262,124 +287,10 @@ class WebApp():
         self.repeatMeasurements.setEnabled(True)
         self.delayMeasurements.setEnabled(True)
         self.autoIntegrateTimeout.setEnabled(True)
-        self.outputDir.setEnabled(True)
+        self.outputDir.setEnabled(True)'''
         
-    def status(self):
-        
-        # save status here
-        statusInfo = {}
-        
-        # check if we need to update times
-        #now = datetime.datetime.now(tz=pytz.utc)
-        #self.localTime.setText(now.strftime("%Y-%m-%dT%H:%M:%S"))
-        
-        if self._piccolo!=None:
-            try:
-                pass
-                #ptime = self._piccolo.piccolo.getClock()
-                #self.piccoloTime.setText(ptime.split('.')[0])
-            except:
-                pass
-            try:
-                pmem = self._piccolo.piccolo.memory()
-                statusInfo['memory'] = pmem
-                #self.percentMem.setValue(pmem)
-            except:
-                pass
-            try:
-                pcpu = self._piccolo.piccolo.cpu()
-                statusInfo['cpu'] = pcpu
-                #self.percentCPU.setValue(pcpu)
-            except:
-                pass
-        
-        
-        # handle status
-        state = 'red'
-        status = 'disconnected'
-        if self._piccolo != None:
-            try:
-                pstatus,estatus = self._piccolo.piccolo.status(listener=self._piccolo.listenerID)
-            except:
-                pstatus = piccolo2.PiccoloStatus.PiccoloStatus()
-                pstatus.connected = False
-                estatus = None
-            
-            if pstatus.connected:
-                status = 'connected'
-                state = 'green'
-            else:
-                status = 'disconnected'
-                state = 'red'
-            if pstatus.busy:
-                status = 'busy'
-                state = 'orange'
-            if pstatus.paused:
-                status += ', paused'
-                #self.pauseRecordingButton.setText("Unpause")
-            else:
-                pass
-                #self.pauseRecordingButton.setText("Pause")
-            if pstatus.file_incremented:
-                state = 'yellow'
-                status += ', file_incr'
-            msg=''
-            if pstatus.new_message:
-                msg = self._piccolo.piccolo.getMessage(listener=self._piccolo.listenerID)
-                msg =msg.split('|')
-                if msg[0] == 'IT':
-                    spectrometer,shutter = msg[1:]
-                    #self._times.updateIntegrationTimeDisplay(spectrometer,shutter)
-                elif msg[0] == 'ITmin':
-                    spectrometer = msg[1]
-                    #self._times.updateIntegrationTimeDisplay(spectrometer,'min')
-                elif msg[0] == 'ITmax':
-                    spectrometer = msg[1]
-                    #self._times.updateIntegrationTimeDisplay(spectrometer,'max')
-                elif msg[0] == 'CR':
-                    pass
-                    #self.setCurrentRun(str(msg[1]))
-                elif msg[0] == 'AI':
-                    pass
-                    #self.setAutoIntegrationRepeats(int(msg[1]))
-                elif msg[0] == 'NC':
-                    pass
-                    #self.setNCycles(int(msg[1]))
-                elif msg[0] == 'D':
-                    pass
-                    #self.setDelay(float(msg[1]))
-                elif msg[0] == 'warning':
-                    pass
-                    #QtGui.QMessageBox.warning(self,'Warning',msg[1],QtGui.QMessageBox.Ok)
-            if estatus is not None and self._extendedStatus is not None:
-                self._extendedStatus.update(estatus)
-                if self._extendedStatus.isAutointegrating():
-                    status += ' autointegrating'
-                if self._extendedStatus.isRecording():
-                    status += ' recording'
-                    for s in self._extendedStatus.shutters:
-                        status += ' %s '%s
-                        if self._extendedStatus.isOpen(s):
-                            status += '0'
-                        else:
-                            status += ' '
 
-        if state=="green":
-            pass
-            #self.enableEdit()
-        else:
-            pass
-            #self.disableEdit()
-                            
-        #self.statusLabel.setText(status)
-        #self.statusLabel.setStyleSheet(' QLabel {color: %s}'%state)
-        #self.repaint()
-        statusInfo['state']=state
-        statusInfo['status']=status
-        statusInfo['msg']=msg
-        return statusInfo
-
-    def startRecording(self,start=None,end=None,interval=None):
+    '''def startRecording(self,start=None,end=None,interval=None):
         #n = self.repeatMeasurements.value()
         #if n==0:
         #    n='Inf'
@@ -476,41 +387,259 @@ class WebApp():
             self.changeCurrentRun(cr=r)
         
     def stopRecording(self):
-        self._piccolo.piccolo.abort()
+        self._piccolo.piccolo.abort()'''
 
-    def downloadSpectra(self):
-        odir = str(self.outputDir.text())
+    def downloadSpectra(self, spectraName, direction=None):
+        '''Downloads measurements of spectra for a certain direction
+        
+        :param spectraName: the name of a spectra
+        :param direction: optional, e.g. Upwelling
+        
+        '''
+        result = {}
         if self._piccolo!=None:
-            if odir not in self._spectraList:
-                self._spectraList[odir] = []
-            self._spectraList[odir] += self._piccolo.piccolo.getSpectraList(outDir=odir,haveNFiles=len( self._spectraList[odir]))
-        else:
-            return
-        spectraName = SpectraListDialog.getSpectrum(fileList=self._spectraList[odir])
-        self._spectra = self._piccolo.piccolo.getSpectra(fname=spectraName)
-        self._selectedDirection = self._spectra.directions[0]
-        spectra = []
-        for s in ['Light','Dark']:
-            if self._spectra.haveSpectrum(s):
-                spectra.append(s)
-        self._selectedSpectrum = spectra[0]
+            spectra = self._piccolo.piccolo.getSpectra(fname=spectraName)
+            if direction is None:
+                direction = spectra.directions[0]
+            brightness=[]
+            for b in ['Light','Dark']:
+                if spectra.haveSpectrum(b):
+                    brightness.append(b)
+            selectedSpectrum = brightness[0]
+            piccoloSpectra = spectra.getSpectra(direction, selectedSpectrum)
+            result['data'] = []
+            for s in piccoloSpectra:
+                xyList = self.generateXYlist(s.waveLengths, s.pixels)
+                sDict = s.as_dict(pixelType='list')
+                sDict['plotList'] = xyList
+                sDict['Directions'] = spectra.directions
+                result['data'].append(sDict)            
+        return result
 
-        self.selectShutter.clear()
-        self.selectShutter.addItems(self._spectra.directions)
-        self.selectSpectrum.clear()
-        self.selectSpectrum.addItems(spectra)
 
-    def setSpectrumAndDirection(self):
+    def generateXYlist(self, x, y):
+        '''Generate an XY list from two lists for plotting
+        
+        :param x: the list of x values
+        :param y: the list of y values
+        
+        Structure of the returned data:
+            [{
+                x: 10,
+                y: 20
+            }, {
+                x: 15,
+                y: 10
+            }]
+        
+        '''
+        xyList=[]
+        for i, val in enumerate(x):
+            xyList.append({'x': x[i], 'y': y[i]})
+        return xyList
+    
+    
+    def getSpectraList(self, run=None):
+        '''Returns a list with spectra names of a run
+        
+        :param run: default will be currentRun
+        :returns: a list with spectraNames
+        
+        '''
+        if run is None:
+            run = self._piccolo.piccolo.getCurrentRun()
+        fileList = self._piccolo.piccolo.getSpectraList(outDir=run)
+        self._spectraList = fileList;
+        return self._spectraList
+        
+    def getRunList(self):
+        '''Returns all runs
+        
+        :returns: a list with runs
+        
+        '''
+        self._runList = self._piccolo.piccolo.getRunList()
+        return self._runList
+    
+    '''def setSpectrumAndDirection(self):
         self._selectedSpectrum = self.selectSpectrum.currentText()
         self._selectedDirection = self.selectShutter.currentText()
         if self._selectedSpectrum in ['Dark','Light'] and self._selectedDirection is not None:
-            self.showSpectra()
+            self.showSpectra()'''
 
-    def showSpectra(self):
+    '''def showSpectra(self):
         self.spectraPlot.setTitle("{dir} {spec}".format(dir=self._selectedDirection,spec=self._selectedSpectrum))
         spectra = self._spectra.getSpectra(self._selectedDirection, self._selectedSpectrum)
-        self.spectraPlot.plotSpectra(spectra)
+        self.spectraPlot.plotSpectra(spectra)'''
 
+
+    
+    '''def updateMounted(self):
+        info = self._piccolo.piccolo.info()
+        self._piccoloInfo['datadir']=info['datadir']
+        if info['datadir'] == 'not mounted':
+            #self.mountDataButton.setText("mount data")
+            pass
+        else:
+            #self.mountDataButton.setText("unmount data")
+            pass'''
+        
+    '''def connectDialog(self):
+        dialog = ConnectDialog()
+        dialog.setConnection(self._connectionType,self._connectionData)
+        data = dialog.getData()
+        if data !=None:
+            self.connect(data[0],data[1])'''
+
+    '''def addSchedule(self):
+        start,interval,end = ScheduleDialog.getSchedule()
+        if start!=None:
+            self.startRecording(start=start,end=end,interval=interval)'''
+
+    '''def quietTimeDialog(self):
+        # get current settings
+        se = self._piccolo.getQuietTime()
+        se = QuietTimeDialog.getQuietTime(start_time=se[0],end_time=se[1])
+        if se is not None:
+            self._piccolo.setQuietTime(start_time=se[0],end_time=se[1])'''
+   
+
+
+    
+    
+    def status(self):
+        
+        # save status here
+        statusInfo = {}
+        
+        # check if we need to update times
+        #now = datetime.datetime.now(tz=pytz.utc)
+        #self.localTime.setText(now.strftime("%Y-%m-%dT%H:%M:%S"))
+        
+        if self._piccolo!=None:
+            try:
+                pass
+                #ptime = self._piccolo.piccolo.getClock()
+                #self.piccoloTime.setText(ptime.split('.')[0])
+            except:
+                pass
+            try:
+                pmem = self._piccolo.piccolo.memory()
+                statusInfo['memory'] = pmem
+                #self.percentMem.setValue(pmem)
+            except:
+                pass
+            try:
+                pcpu = self._piccolo.piccolo.cpu()
+                statusInfo['cpu'] = pcpu
+                #self.percentCPU.setValue(pcpu)
+            except:
+                pass
+        
+        
+        # handle status
+        state = 'red'
+        status = 'disconnected'
+        if self._piccolo != None:
+            try:
+                pstatus,estatus = self._piccolo.piccolo.status(listener=self._piccolo.listenerID)
+            except:
+                pstatus = piccolo2.PiccoloStatus.PiccoloStatus()
+                pstatus.connected = False
+                estatus = None
+            
+            if pstatus.connected:
+                status = 'connected'
+                state = 'green'
+            else:
+                status = 'disconnected'
+                state = 'red'
+            if pstatus.busy:
+                status = 'busy'
+                state = 'orange'
+            if pstatus.paused:
+                status += ', paused'
+                #self.pauseRecordingButton.setText("Unpause")
+            else:
+                pass
+                #self.pauseRecordingButton.setText("Pause")
+            if pstatus.file_incremented:
+                state = 'yellow'
+                status += ', file_incr'
+            msg=''
+            if pstatus.new_message:
+                msg = self._piccolo.piccolo.getMessage(listener=self._piccolo.listenerID)
+                msg =msg.split('|')
+                if msg[0] == 'IT':
+                    spectrometer,shutter = msg[1:]
+                    #self._times.updateIntegrationTimeDisplay(spectrometer,shutter)
+                    value = self._times.getIntegrationTime(spectrometer,shutter)
+                    row=self._times.spectrometers.index(spectrometer)
+                    col =self._times.shutters.index(shutter)
+                    self._piccoloInfo['integrationTimes'] = self._times.getIntegrationTimes()
+                    self._piccoloInfo['message']={'type': 'integration', 'value': value, 'column': col, 'row': row}
+                elif msg[0] == 'ITmin':
+                    spectrometer = msg[1]
+                    #self._times.updateIntegrationTimeDisplay(spectrometer,'min')
+                    value = self._times.getIntegrationTime(spectrometer,'min')
+                    row=self._times.spectrometers.index(spectrometer)
+                    col =self._times.shutters.index('min')
+                    self._piccoloInfo['integrationTimes'] = self._times.getIntegrationTimes()
+                    self._piccoloInfo['message']={'type': 'integration', 'value': value, 'column': col, 'row': row}
+                elif msg[0] == 'ITmax':
+                    spectrometer = msg[1]
+                    #self._times.updateIntegrationTimeDisplay(spectrometer,'max')
+                    value = self._times.getIntegrationTime(spectrometer,'max')
+                    row=self._times.spectrometers.index(spectrometer)
+                    col =self._times.shutters.index('max')
+                    self._piccoloInfo['integrationTimes'] = self._times.getIntegrationTimes()
+                    self._piccoloInfo['message']={'type': 'integration', 'value': value, 'column': col, 'row': row}
+                elif msg[0] == 'CR':
+                    pass
+                    #self.setCurrentRun(str(msg[1])) 
+                elif msg[0] == 'AI':
+                    pass
+                    #self.setAutoIntegrationRepeats(int(msg[1]))
+                elif msg[0] == 'NC':
+                    pass
+                    #self.setNCycles(int(msg[1]))
+                elif msg[0] == 'D':
+                    pass
+                    #self.setDelay(float(msg[1]))
+                elif msg[0] == 'warning':
+                    pass
+                    #QtGui.QMessageBox.warning(self,'Warning',msg[1],QtGui.QMessageBox.Ok)
+            if estatus is not None and self._extendedStatus is not None:
+                self._extendedStatus.update(estatus)
+                if self._extendedStatus.isAutointegrating():
+                    status += ' autointegrating'
+                if self._extendedStatus.isRecording():
+                    status += ' recording'
+                    for s in self._extendedStatus.shutters:
+                        status += ' %s '%s
+                        if self._extendedStatus.isOpen(s):
+                            status += '0'
+                        else:
+                            status += ' '
+
+        if state=="green":
+            pass
+            #self.enableEdit()
+        else:
+            pass
+            #self.disableEdit()
+                            
+        #self.statusLabel.setText(status)
+        #self.statusLabel.setStyleSheet(' QLabel {color: %s}'%state)
+        #self.repaint()
+        statusInfo['state']=state
+        statusInfo['status']=status
+        statusInfo['msg']=msg
+        return statusInfo
+    
+    
+    
+    
     def connect(self,connection,data):
         ok = True
         if connection == 'http':
@@ -542,11 +671,20 @@ class WebApp():
         # get the server version
         self._piccoloInfo['piccoloVersion'] = self._piccolo.getVersion()
         # get the data dir
-        self.updateMounted()
+        info = self._piccolo.piccolo.info()
+        self._piccoloInfo['datadir']=info['datadir']
         # initialise the extended status
         self._extendedStatus = PiccoloExtendedStatus(self._piccolo.piccolo.getSpectrometerList(),self._piccolo.piccolo.getShutterList())
         
         self.setPiccoloInfos()
+        
+        # hook up integration times
+        self._times.piccoloConnect(self._piccolo.piccolo)
+        self._piccoloInfo['integrationTimes'] = self._times.getIntegrationTimes()
+        
+        #download spectra List
+        self.getSpectraList()
+        
 
         
     def setPiccoloInfos(self):
@@ -556,9 +694,6 @@ class WebApp():
         #self.piccoloTime.setText(ptime.split('.')[0])
         self._piccoloInfo['piccoloTime']= ptime.split('.')[0]
 
-        # hook up integration times
-        #self._times.piccoloConnect(self._piccolo.piccolo)
-
         # hook up scheduler
         #self._scheduledJobs.piccoloConnect(self._piccolo)
 
@@ -567,54 +702,49 @@ class WebApp():
         self._piccoloInfo['nCycles'] = self._piccolo.piccolo.getNCycles()
         self._piccoloInfo['delay'] = self._piccolo.piccolo.getDelay()
         self._piccoloInfo['currentRun'] = self._piccolo.piccolo.getCurrentRun()
+
         
+    def updateIntegration(self, integration):
+        for i in integration:
+            self._times.updateIntegrationTime(**i)
      
         
-    
-    def updateMounted(self):
-        info = self._piccolo.piccolo.info()
-        self._piccoloInfo['datadir']=info['datadir']
-        if info['datadir'] == 'not mounted':
-            #self.mountDataButton.setText("mount data")
-            pass
-        else:
-            #self.mountDataButton.setText("unmount data")
-            pass
-        
-    '''def connectDialog(self):
-        dialog = ConnectDialog()
-        dialog.setConnection(self._connectionType,self._connectionData)
-        data = dialog.getData()
-        if data !=None:
-            self.connect(data[0],data[1])'''
 
-    def addSchedule(self):
-        start,interval,end = ScheduleDialog.getSchedule()
-        if start!=None:
-            self.startRecording(start=start,end=end,interval=interval)
-
-    def quietTimeDialog(self):
-        # get current settings
-        se = self._piccolo.getQuietTime()
-        se = QuietTimeDialog.getQuietTime(start_time=se[0],end_time=se[1])
-        if se is not None:
-            self._piccolo.setQuietTime(start_time=se[0],end_time=se[1])
-   
     @property
     def piccoloInfo(self):
         return self._piccoloInfo
+    
+    @property
+    def spectraList(self):
+        return self._spectraList
+
+
+    @property
+    def runList(self):
+        return self._runList
 
     
-    def updateLoop(self, interval=1.0):
-        '''Contacts the client to update the piccolo info every time interval'''
+    def updateLoop(self, interval=2.0):
+        '''Contacts the client to update the piccolo info every time interval
+        
+        :param interval: the interval to update, defaul is 2.0
+        
+        '''
         threading.Timer(interval, self.updateLoop).start()
         self._piccoloInfo['statusInfo'].update(self.status())
+        self._piccoloInfo['integrationTimes'] = self._times.getIntegrationTimes()
         self.setPiccoloInfos()
+        #get run list
+        self.getRunList()
+        #download spectra List
+        self.getSpectraList()
+    
+    
+    
     
 def main(connection):
     pPiccolo = WebApp()
     pPiccolo.connect(connection[0],connection[1])
     pPiccolo.updateLoop()
-    print dir(PiccoloExtendedStatus)
     return pPiccolo
 

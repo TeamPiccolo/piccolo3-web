@@ -59,6 +59,12 @@
                           <span>Dashboard</span>
                       </a>
           </li>
+          <li {% if request.path == "/record" %} class="active" {% endif %}>
+            <a class="" href="/record">
+                          <i class="icon_mic_alt"></i>
+                          <span>Record</span>
+                      </a>
+          </li>
           <li {% if request.path == "/results" %} class="active" {% endif %}>
             <a class="" href="results">
                           <i class="icon_piechart"></i>
@@ -80,6 +86,8 @@
 
   <!-- javascripts -->
 
+
+
   <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
   <!-- bootstrap -->
   <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
@@ -88,7 +96,7 @@
   <script src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}" type="text/javascript"></script>
 
     <!--custom script for all pages-->
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jq-scripts.js') }}"></script>
     <!--date picker-->
   <script src="{{ url_for('static', filename='js/moment.js') }}"></script>
   <script src="{{ url_for('static', filename='js/daterangepicker.js') }}"></script>

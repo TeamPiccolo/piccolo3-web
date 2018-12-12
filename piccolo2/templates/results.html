@@ -29,32 +29,30 @@
                       <div class="row">
 
                           <!-- Table -->
-                          <div class="col-lg-6">
+                          <div class="col-lg-4">
                               <section class="panel">
                                   <header class="panel-heading">
-                                      Select a Result
+                                      Run: <select onchange="getSpectraList(this)" class="form-control" style="width: 50%; display: inline; margin: 5px;">
+                                      {% for run in runList %}
+                                          <option
+                                          {% if run==currentRun %}
+                                            selected="true"
+                                          {% endif %}
+                                          >{{run}}</option>
+                                      {% endfor %}
+                                    </select>
                                   </header>
                                   <div class="panel-body">
-                                      <table class="table table-condensed table-hover">
+                                      <table class="table table-condensed table-hover fixed-header">
                                           <thead>
                                             <tr>
-                                              <th>Jobs</th>
-                                              <th></th>
+                                              <th>Spectra List</th>
                                             </tr>
                                           </thead>
-                                          <tbody>
-                                            <tr>
-                                              <td>1</td>
-                                              <td>
-                                                Bla
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <td>2</td>
-                                              <td>
-                                                Bla
-                                              </td>
-                                            </tr>
+                                          <tbody id="spectraList" class>
+                                            {% for file in spectraList %}
+                                                <tr><th onclick="getSpectrum(this)" style="cursor: pointer;">{{file}}</th></tr>
+                                            {% endfor %}
                                           </tbody>
                                         </table>
                                   </div>
@@ -62,13 +60,14 @@
                           </div>
                           <!-- End Table Component-->
                         <!-- Chart -->
-                          <div class="col-lg-6">
+                          <div class="col-lg-8">
                               <section class="panel">
                                   <header class="panel-heading">
-                                      Result Chart
+                                      Result Chart: <span id='result-file'></span>
                                   </header>
                                   <div class="panel-body text-center">
-                                      <canvas id="line" height="300" width="450"></canvas>
+                                      <canvas id="line" height="320" width="550"></canvas>
+                                      <div id='select-direction' style="margin-top: 12px"></div>
                                   </div>
                               </section>
                           </div>
@@ -83,13 +82,15 @@
       </section>
       <!--main content end-->
     </section>
+
+
 {% endblock %}
 
 
 {% block scripts %}
 <!-- javascripts -->
 <!-- chartjs -->
-<script src="{{ url_for('static', filename='js/chartjs/Chart.js') }}"></script>
+<script src="{{ url_for('static', filename='js/Chart.js') }}"></script>
 <!-- custom chart script for this page only-->
-<script src="{{ url_for('static', filename='js/chartjs-custom.js') }}"></script>
+<script src="{{ url_for('static', filename='js/piccolo2-results.js') }}"></script>
 {% endblock %}

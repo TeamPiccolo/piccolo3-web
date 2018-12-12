@@ -52,7 +52,7 @@
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
         <div class="info-box green-bg">
           <i class="fa fa-asterisk"></i>
-          <div><h4>Something</h4><p>XXXXXXXXX XXXXXX</p></div>
+          <div><h4>Developed By</h4><p>The piccolo team</p></div>
         </div>
         <!--/.info-box-->
       </div>
@@ -69,7 +69,7 @@
           <div class="panel-heading">
             <h2><i class="fa fa-flag-o red"></i><strong>Status: CPU and Memory</strong></h2>
             <div class="panel-actions">
-              <a onclick="getInfo()" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
+              <a onclick="getInfo(true, true)" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
             </div>
           </div>
           <div class="panel-body">
@@ -127,102 +127,6 @@
       <!--/col-->
 
     </div>
-
-    <!-- statics end -->
-
-
-
-    <!-- Tables start-->
-      <div class="row">
-      <div class="col-sm-6">
-        <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2><i class="fa fa-map-marker"></i><strong>Record: Blabla</strong></h2>
-            <div class="panel-actions">
-              <a class="btn-setting"><i class="fa fa-rotate-right"></i></a>
-            </div>
-          </div>
-        <div class="panel-body">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>min</th>
-                <th>downwelling</th>
-                <th>upwelling</th>
-                <th>max</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>51</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-              </tr>
-              <tr>
-                <td>52</td>
-                <td>xx</td>
-                <td>xx</td>
-                <td>xx</td>
-              </tr>
-            </tbody>
-          </table>
-            </div>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2><i class="fa fa-clock-o"></i><strong>Schedule: Blabla</strong></h2>
-          </div>
-        <div class="panel-body">
-            <form class="form-horizontal " action="#">
-              <!--date picker start-->
-
-              <div class="form-group">
-                <label class="control-label col-sm-4">Default Datepicker</label>
-                <div class="col-sm-6">
-                  <input id="dp1" type="text" value="28-10-2013" size="16" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="control-label col-sm-4"> Date Ranges</label>
-                <div class="col-sm-6">
-                  <div class="input-prepend">
-                    <input id="reservation" type="text" class="form-control" />
-                  </div>
-                </div>
-              </div>
-              <!--date picker end-->
-                <!--check boxes-->
-                <div class="checkbox">
-                    <label>
-                       <input type="checkbox" value="">
-                         Option one is this and that&mdash;be sure to include why it's great option one
-                      </label>
-                  </div>
-
-                  <div class="radio">
-                    <label>
-                      <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-                                              Option one is this and that&mdash;be sure to include why it's great
-                    </label>
-                  </div>
-                <!--check boxes end-->
-                <br>
-                <div class="col-lg-offset-4 col-lg-8">
-                  <button type="submit" class="btn btn-danger">Schedule</button>
-                </div>
-
-
-            </form>
-            </div>
-        </div>
-      </div>
-
-    </div>
-
   </section>
 </section>
 <!--main content end-->
@@ -237,100 +141,11 @@
 
 /* Read to configuration jinja parameters */
 var piccoloTime = '{{ piccoloTime }}';
-
-
-
-/* Times ------------------------------------------------------------------ */
-var date = new Date(piccoloTime)
-date.setSeconds(date.getSeconds()+1) // add one to sychronise
-
-//piccolo time html elements
-var phours = document.getElementById('phours');
-var pmins = document.getElementById('pmin');
-var psecs = document.getElementById('psec');
-//local time html elements
-var lhours = document.getElementById('lhours');
-var lmins = document.getElementById('lmin');
-var lsecs = document.getElementById('lsec');
-
-//set interval to display new time every second
-var timer = setInterval(displayTime, 1000);
-
-//display time with one second increment
-function displayTime(){
-  date.setSeconds(date.getSeconds()+1);
-  phours.innerHTML=('0'+date.getHours()).slice(-2); //0 and slice is to format 1 to 01
-  pmins.innerHTML=('0'+date.getMinutes()).slice(-2);
-  psecs.innerHTML=('0'+date.getSeconds()).slice(-2);
-  //local time
-  ldate=new Date();
-  lhours.innerHTML=('0'+ldate.getHours()).slice(-2);
-  lmins.innerHTML=('0'+ldate.getMinutes()).slice(-2);
-  lsecs.innerHTML=('0'+ldate.getSeconds()).slice(-2);
-
-}
-
-/*updates/ synchronises the piccolo time*/
-function updateClocks(ptime){
-  date = new Date(ptime);
-  date.setSeconds(date.getSeconds()+1); // add one to sychronise
-  displayTime();
-}
-
-
-/* End times ------------------------------------------------------------------ */
-
-/* Usage (CPU/Memory) --------------------------------------------------------- */
-
-//set interval to display new usage every second
-var usageTimer = setInterval(updateInfo, 2000);
-x=9
-function updateInfo(){
-  getInfo(true, true, true);
-}
-
-function updateCPU(value){
-  $('#cpu').attr('aria-valuenow', value).css('width', value+'%');
-  $('#cpu').html(value+'%')
-}
-
-function updateMemory(value){
-  $('#memory').attr('aria-valuenow', value).css('width', value+'%');
-  $('#memory').html(value+'%')
-}
-
-function updateStatus(status, state){
-  $('#status').html(status)
-  $('#status-icon').css('color', state)
-}
-
-function getInfo(cpu, memory, status, clock){
-    $.ajax({
-    url: "info",
-    cache: false,
-    dataType: "json",
-    success: function(data) {
-      console.log(data);
-      console.log(cpu, memory, status, clock)
-      if(cpu){
-        updateCPU(data.statusInfo.cpu);
-      }
-      if(memory){
-        updateMemory(data.statusInfo.memory);
-      }
-      if(status){
-        updateStatus(data.statusInfo.status, data.statusInfo.state);
-      }
-      if(clock){
-        updateClocks(data.piccoloTime);
-      }
-    },
-    error: function (request, status, error) { console.log(status + ", " + error); }
-  });
-}
-
-
-//var mapcenter = {{map_centre}};
+var status = "{{statusInfo['status']}}"
+var state = "{{statusInfo['state']}}"
 
 </script>
+
+<script src="{{ url_for('static', filename='js/piccolo2-dash.js') }}"></script>
+
 {% endblock %}

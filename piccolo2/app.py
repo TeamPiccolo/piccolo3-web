@@ -34,7 +34,7 @@ App Endpoints:
 import web
 import argparse
 import logging
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from definitions import CONFIG_PATH
 from configobj import ConfigObj
 
@@ -54,8 +54,6 @@ def main():
 
     if args.version:
         from client import __version__
-        print 'client:',__version__
-        print 'web:',web.__version__
         return
 
     # logger
@@ -73,9 +71,9 @@ def main():
     else:
         connection = ('http',args.piccolo_url)
 
+    # global variable which will be used to access the piccolo for querying
     global piccoloProxy
     piccoloProxy=web.main(connection)
-    print(piccoloProxy.piccoloInfo)
     run(debug=args.debug)
     
     
@@ -92,6 +90,8 @@ def run(debug):
 app = Flask(__name__)
    
 
+## template pages
+
 @app.route('/', methods=['GET'])
 def index():
     '''HTML for index page of the dashboard'''
@@ -103,8 +103,18 @@ def index():
 def results():
     '''Renders HTML for result page'''
     info = piccoloProxy.piccoloInfo
+    info['spectraList'] = piccoloProxy.spectraList
+    info['runList'] = piccoloProxy.runList
     return render_template('results.html', **info)
-    
+
+@app.route('/record', methods=['GET'])
+def record():
+    '''Renders HTML for record page'''
+    info = piccoloProxy.piccoloInfo
+    return render_template('record.html', **info)
+        
+
+## queries
 
 @app.route('/info', methods=['GET'])
 def info():
@@ -113,8 +123,83 @@ def info():
     '''
     info = piccoloProxy.piccoloInfo
     return jsonify(info)
-    
 
+@app.route('/spectraList', methods=['GET'])
+def spectraList():
+    '''Returns result as JSON with given spectrum
+    
+    Expected params:
+        run(optional), will take currentRun as default
+    
+    
+    Example url
+    root/spectraList?run=2018-11-30
+    
+    '''
+    params={}
+    if 'run' in request.args:
+        params['run'] = request.args.get('run')
+    data = {'spectraList':piccoloProxy.getSpectraList(**params)}
+    return jsonify(data)
+
+
+@app.route('/result', methods=['GET'])
+def result():
+    '''Returns result as JSON with given spectrum
+    
+    Expected params:
+        spectraName
+        direction(optional)
+    
+    
+    Example url
+    root/result?spectraName=2018-11-30/b000000_s000000_light.pico&direction=Upwelling
+    
+    '''
+    try:
+        spectraName = request.args['spectraName']
+    except KeyError:
+        raise APIRequestException('Missing argument <spectraName>', status_code=419)
+    params={'spectraName': spectraName}
+    if 'direction' in request.args:
+        params['direction'] = request.args.get('direction')
+    data = piccoloProxy.downloadSpectra(**params)
+    return jsonify(data)
+    
+@app.route('/integration', methods=['POST'])
+def integration():
+    '''updates integration times
+    
+    Expected params:
+        column
+        row
+        value
+        
+    Example url:
+        root/integration?column=1&row=1&value=300
+    
+    '''
+    try:
+        col = int(request.args['column'])
+        row = int(request.args['row'])
+    except TypeError:
+        raise APIRequestException('Missing argument', status_code=419)    
+    except ValueError:
+        raise APIRequestException('Invalid argument', status_code=420)
+    
+    try:
+        value = float(request.args['value'])
+    except TypeError:
+        raise APIRequestException('Missing argument', status_code=419)    
+    except ValueError:
+        msg='Invalid argument <'+request.args.get('value')+'>'
+        raise APIRequestException(msg, status_code=420)
+        
+    newInt = [{'column': col, 'row': row, 'value':value}]
+    
+    piccoloProxy.updateIntegration(newInt)
+    return jsonify({})
+    
 
 
 ## Error Handling
@@ -150,7 +235,7 @@ class APIRequestException(Exception):
         Returns:
             dict - a dictionnary of the Error
         '''
-        rv = dict(self.payload or ())
+        rv = dict(())
         rv['message'] = self.message
         rv['status_code'] = self.status_code
         return rv

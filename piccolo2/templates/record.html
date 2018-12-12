@@ -1,0 +1,186 @@
+{% extends "layout.html" %}
+{% block head %}
+
+{% endblock %}
+{% block content %}
+
+<!--main content start-->
+<section id="main-content">
+  <section class="wrapper">
+    <!--overview start-->
+    <div class="row">
+      <div class="col-lg-12">
+        <h3 class="page-header"><i class="fa fa-laptop"></i> Dashboard</h3>
+        <ol class="breadcrumb">
+          <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+          <li><i class="icon_mic_alt"></i>Record</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+        <div class="info-box dark-bg">
+          <i id='status-icon' style="color: {{statusInfo['state']}};" class="fa fa-leaf"></i>
+            <div><h4>Status</h4><p id='status'>{{statusInfo['status']}}</p></div>
+        </div>
+        <!--/.info-box-->
+      </div>
+      <!--/.col-->
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+        <div class="info-box blue-bg">
+          <i class="fa fa-clock-o"></i>
+            <div><h4>Piccolo Time</h4>
+              <h3><span id='phours'>00</span>:<span id='pmin'>00</span>:<span id='psec'>00</span></h3></div>
+
+        </div>
+        <!--/.info-box-->
+      </div>
+      <!--/.col-->
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+        <div class="info-box teal-bg">
+          <i class="fa fa-clock-o"></i>
+            <div><h4>Local Time</h4><h3><span id='lhours'>00</span>:<span id='lmin'>00</span>:<span id='lsec'>00</span></h3></div>
+
+        </div>
+        <!--/.info-box-->
+      </div>
+      <!--/.col-->
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+        <div class="info-box green-bg">
+          <i class="fa fa-asterisk"></i>
+          <div><h4>Developed by</h4><p>The piccolo team</p></div>
+        </div>
+        <!--/.info-box-->
+      </div>
+      <!--/.col-->
+
+    </div>
+    <!--/.row-->
+
+    </div>
+
+    <!-- statics end -->
+
+
+
+    <!-- Tables start-->
+      <div class="row">
+      <div class="col-lg-7">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2><i class="fa fa-map-marker"></i><strong>Record: change a value and press enter to submit</strong></h2>
+            <div class="panel-actions">
+              <a class="btn-setting" onclick="getInfo(false, false, true)"><i class="fa fa-rotate-right"></i></a>
+            </div>
+          </div>
+        <div class="panel-body">
+
+          <table class="table" id='record-table'>
+            <thead>
+              <tr>
+                <th>
+                {% for shutter in integrationTimes['shutters'] %}
+                    <th>{{shutter}}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody class="table-editable">
+              {% for values in integrationTimes['values'] %}
+                {% set cnt = loop.index0 %}
+                <tr>
+                <td>{{integrationTimes['spectrometers'][loop.index0] | replace("_", " ")}}</td>
+                {% for value in values %}
+                  <td><span id="{{cnt}}-{{loop.index0}}">{{value}}</span></td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <p id='record-msg'></p>
+            </div>
+
+            <div class="panel-footer">
+                <h2><i class="fa fa-info"  id='record-table-statusicon'></i><span  id='record-table-statusinfo'></span></h2>
+              </div>
+
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2><i class="fa fa-clock-o"></i><strong>Schedule:</strong></h2>
+          </div>
+        <div class="panel-body">
+            <form class="form-horizontal " action="#">
+              <!--date picker start-->
+
+              <div class="form-group">
+                <label class="control-label col-sm-4">Date</label>
+                <div class="col-sm-6">
+                  <input id="dp1" type="text" value="28-10-2013" size="16" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-sm-4"> Date Range</label>
+                <div class="col-sm-6">
+                  <div class="input-prepend">
+                    <input id="reservation" type="text" class="form-control" />
+                  </div>
+                </div>
+              </div>
+              <!--date picker end-->
+                <!--check boxes-->
+                <div class="checkbox">
+                    <label>
+                       <input type="checkbox" value="">
+                         Run 1
+                      </label>
+                  </div>
+
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                      Run 2
+                    </label>
+                  </div>
+                <!--check boxes end-->
+                <br>
+                <div class="col-lg-offset-4 col-lg-8">
+                  <button type="submit" class="btn btn-danger">Schedule</button>
+                </div>
+
+
+            </form>
+            </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+</section>
+<!--main content end-->
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script type="text/javascript">
+
+/* Read to configuration jinja parameters */
+var piccoloTime = '{{ piccoloTime }}';
+var status = "{{statusInfo['status']}}"
+var state = "{{statusInfo['state']}}"
+
+</script>
+
+<script src="{{ url_for('static', filename='js/piccolo2-record.js') }}"></script>
+
+{% endblock %}

@@ -57,6 +57,51 @@ table tr th { color: #688a7e;}
 
 }
 
+/* Table with fixed header*/
+.fixed-header tbody{
+  display: block;
+  overflow: auto;
+  height: 350px;
+
+}
+
+.fixed-header thead tr{
+  display: block;
+}
+/* END Table with fixed header*/
+
+/* Editable table cells*/
+tbody.table-editable span{
+  background-color: white;
+  width: 90%;
+  padding: 4px;
+  display: block;
+  border-radius: 6px;
+  border-width: 1.4px;
+  border-color: lightgrey;
+  border-style: solid;
+}
+
+tbody.table-editable span:hover,
+tbody.table-editable span:active,
+tbody.table-editable span:focus{
+  border-color: blue;
+}
+
+/* Editable table cells*/
+tbody.table-editable-disabled span{
+  background-color: lightgrey;
+  width: 50%;
+  padding: 4px;
+  display: block;
+  border-radius: 6px;
+  border-width: 1.4px;
+  border-color: lightgrey;
+  border-style: solid;
+  cursor: not-allowed;
+}
+
+
 
 
 #container {
@@ -590,7 +635,7 @@ a.logo span {
 
 }
 
-.panel .panel-heading {
+.panel .panel-heading{
 
   line-height: 34px;
 
@@ -618,13 +663,28 @@ a.logo span {
 
 }
 
+.panel .panel-footer{
+
+  line-height: 34px;
+  padding: 0 15px;
+  min-height: 24px;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  position: relative;
+}
+
+
+
 .panel .panel-heading .panel-title {
 
   line-height: 40px;
 
 }
 
-.panel .panel-heading i {
+.panel .panel-heading i{
 
   width: 30px;
 
@@ -636,6 +696,16 @@ a.logo span {
 
 }
 
+.panel .panel-footer i{
+
+ width: 30px;
+ display: inline-block;
+ font-size: 14px;
+ border-right:1px solid #e6e6e6 ;
+}
+
+
+
 .panel .panel-heading ul li {
 
   border-top:1px solid #e6e6e6 ;
@@ -646,26 +716,30 @@ a.logo span {
 
 }
 
-.panel .panel-heading h2 {
+.panel .panel-heading h2{
 
   height: 100%;
-
   width: auto;
-
   display: inline-block;
-
   font-size: 14px;
-
   position: relative;
-
   margin: 0;
-
   line-height: 34px;
-
   font-weight: 400;
-
   letter-spacing: 0;
+}
 
+.panel .panel-footer h2 {
+
+  height: 100%;
+  width: auto;
+  display: inline-block;
+  font-size: 13px;
+  position: relative;
+  margin: 0;
+  line-height: 25px;
+  font-weight: 400;
+  letter-spacing: 0;
 }
 
 .panel .panel-heading .panel-actions {
