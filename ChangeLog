@@ -1,8 +1,21 @@
+2018-12-12  Livia Jakob  <livia.jakob@gmx.ch>
+
+	* ChangeLog, piccolo2/app.py, piccolo2/static/css/style.css,
+	piccolo2/static/js/Chart.js, piccolo2/static/js/jq-scripts.js,
+	piccolo2/static/js/piccolo2-dash.js,
+	piccolo2/static/js/piccolo2-record.js,
+	piccolo2/static/js/piccolo2-results.js,
+	piccolo2/static/js/piccolo2.js~, piccolo2/templates/index.html,
+	piccolo2/templates/layout.html, piccolo2/templates/record.html,
+	piccolo2/templates/results.html, piccolo2/web/Piccolo.py:
+	changes to piccolo web frontend
+	[ff8fdb26f4ad] [tip]
+
 2018-11-14  Livia Jakob  <livia.jakob@gmx.ch>
 
 	* README.md~:
 	merged changes
-	[58b14f5a5ff4] [tip]
+	[58b14f5a5ff4]
 
 	* ChangeLog:
 	updated
