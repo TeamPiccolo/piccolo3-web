@@ -1,6 +1,5 @@
 include README.md
 include COPYING
-include piccolo2.yml
 include ChangeLog
-recursive-include piccolo2/static *
-recursive-include piccolo2/templates *
+recursive-include piccolo3/static *
+recursive-include piccolo3/templates *

@@ -28,7 +28,6 @@ setup(
         'setuptools_scm'
         ],
     install_requires = [
-        "piccolo2-client",
         "numpy",
         "flask",
         "pytz",
@@ -36,14 +35,14 @@ setup(
     ],
     entry_points={
         'gui_scripts': [
-            'piccolo2-web = piccolo2.app:main',
+            'piccolo3-web = piccolo3.app:main',
         ],
     },
     include_package_data=True,
 
     # metadata for upload to PyPI
     author = "Livia Jakob, Magnus Hagdorn, Alasdair MacArthur, Iain Robinson",
-    description = "Part of the piccolo2 system. This package provides a web GUI client",
+    description = "Part of the piccolo3 system. This package provides a web GUI client",
     license = "GPL",
-    url = "https://bitbucket.org/uoepiccolo/piccolo2-web",
+    url = "https://bitbucket.org/uoepiccolo/piccolo3-web",
 )
