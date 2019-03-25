@@ -34,16 +34,16 @@ function getInfo(cpu, memory, status, clock){
     dataType: "json",
     success: function(data) {
       if(cpu){
-        updateCPU(data.statusInfo.cpu);
+        updateCPU(data.cpu);
       }
       if(memory){
-        updateMemory(data.statusInfo.memory);
+        updateMemory(data.mem);
       }
       if(status){
-        updateStatus(data.statusInfo.status, data.statusInfo.state);
+        updateStatus(data.status, data.state);
       }
       if(clock){
-        updateClocks(data.piccoloTime);
+        updateClocks(data.clock);
       }
     },
     error: function (request, status, error) { console.log(status + ", " + error); }

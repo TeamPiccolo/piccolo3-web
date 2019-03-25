@@ -21,8 +21,8 @@
     <div class="row">
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
         <div class="info-box dark-bg">
-          <i id='status-icon' style="color: {{statusInfo['state']}};" class="fa fa-leaf"></i>
-            <div><h4>Status</h4><p id='status'>{{statusInfo['status']}}</p></div>
+          <i id='status-icon' style="color: {{ state }};" class="fa fa-leaf"></i>
+            <div><h4>Status</h4><p id='status'>{{ status }}</p></div>
         </div>
         <!--/.info-box-->
       </div>
@@ -85,7 +85,7 @@
                   <td>CPU</td>
                   <td>
                     <div class="progress progress-striped active">
-                      <div id='cpu' class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{statusInfo['cpu']}}" aria-valuemin="0" aria-valuemax="100" style="width: {{statusInfo['cpu']}}%">
+                      <div id='cpu' class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{cpu}}" aria-valuemin="0" aria-valuemax="100" style="width: {{cpu}}%">
                       </div>
                     </div>
                   </td>
@@ -94,7 +94,7 @@
                   <td>Memory</td>
                   <td>
                     <div class="progress progress-striped active">
-                      <div id='memory' class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{statusInfo['memory']}}" aria-valuemin="0" aria-valuemax="100" style="width: {{statusInfo['memory']}}%">
+                      <div id='memory' class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{mem}}" aria-valuemin="0" aria-valuemax="100" style="width: {{mem}}%">
                       </div>
                     </div>
                   </td>
@@ -115,9 +115,9 @@
             <h2><i class="fa fa-folder"></i><strong>Status Information</strong></h2>
             </div>
             <div class="panel-body">
-                <div><p><b>Piccolo Version:</b> {{piccoloVersion}}</p>
-                  <p><b>Client Version:</b> {{clientVersion}}</p>
-                  <p><b>WebApp Version:</b> {{webAppVersion}}</p>
+                <div><p><b>Piccolo Version:</b> {{server_version}}</p>
+                  <p><b>Client Version:</b> {{client_version}}</p>
+                  <!--<p><b>WebApp Version:</b> {{webAppVersion}}</p>-->
                   <p><b>Data Directory:</b> {{datadir}}</p>
                   <p><br></p>
                 </div>
@@ -140,9 +140,9 @@
 <script type="text/javascript">
 
 /* Read to configuration jinja parameters */
-var piccoloTime = '{{ piccoloTime }}';
-var status = "{{statusInfo['status']}}"
-var state = "{{statusInfo['state']}}"
+var piccoloTime = '{{ clock }}';
+var status = "{{ status }}"
+var state = "{{ state }}"
 
 </script>
 

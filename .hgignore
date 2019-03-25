@@ -1,6 +1,7 @@
 #use global syntax
 syntax: glob
 
+*~
 *.pyc
 *.spyproject
 

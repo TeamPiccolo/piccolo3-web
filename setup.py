@@ -19,8 +19,8 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name = "piccolo2-web",
-    namespace_packages = ['piccolo2'],
+    name = "piccolo3-web",
+    namespace_packages = ['piccolo3'],
     packages = find_packages(),
     use_scm_version=True,
     setup_requires = [
@@ -29,7 +29,7 @@ setup(
         ],
     install_requires = [
         "numpy",
-        "flask",
+        "quart",
         "pytz",
         "configobj",
     ],

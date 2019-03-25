@@ -1,3 +1,10 @@
+2019-03-25 Magnus Hagdorn
+ * .hgignore: filter out some more files
+ * piccolo3/app.py: start new piccolo3 web app
+ * piccolo3/static/js/piccolo2-dash.js: use new json names
+ * piccolo3/templates/index.html: use new names
+ * setup.py: rename project; use quart instead of flask
+
 2018-12-12  Livia Jakob  <livia.jakob@gmx.ch>
 
 	* ChangeLog, piccolo2/Piccolo Dashboard/.DS_Store, piccolo2/Piccolo
