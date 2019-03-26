@@ -1,4 +1,7 @@
 2019-03-26 Magnus Hagdorn
+ * piccolo3/web: tidied away
+
+2019-03-26 Magnus Hagdorn
  * piccolo3/app.py: handle spectrometer integration time settings
  * piccolo3/static/js/piccolo2-record.js: use websocket to communicate with
  piccolo web app
