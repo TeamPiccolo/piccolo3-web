@@ -1,3 +1,9 @@
+2019-03-26 Magnus Hagdorn
+ * piccolo3/app.py: handle spectrometer integration time settings
+ * piccolo3/static/js/piccolo2-record.js: use websocket to communicate with
+ piccolo web app
+ * piccolo3/templates/record.html: use new variables; remove schedule for now
+
 2019-03-25 Magnus Hagdorn
  * .hgignore: filter out some more files
  * piccolo3/app.py: start new piccolo3 web app

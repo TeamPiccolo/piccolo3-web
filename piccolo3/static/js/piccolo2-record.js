@@ -27,27 +27,19 @@ clock - boolean, clock will be updated
 record - boolean, integration values will be updated
 
 */
-function getInfo(status, clock, record){
+function getInfo(status, clock){
     $.ajax({
-    url: "info",
+    url: "info?sysinfo=0",
     cache: false,
     dataType: "json",
     success: function(data) {
       if(status){
-        updateStatus(data.statusInfo.status, data.statusInfo.state);
-        updateTableFooter(data.statusInfo.status, data.statusInfo.state);
-        updateEditable(data.statusInfo.state=='green');
+        updateStatus(data.status, data.state);
+        updateTableFooter(data.status, data.state);
+        updateEditable(data.state=='green');
       }
       if(clock){
-        updateClocks(data.piccoloTime);
-      }
-      if(record){
-        updateIntegrationValues(data.integrationTimes.values);
-      }
-      else if(data.message){
-        if (data.message['type']==='integration'){
-          updateIntegrationValue(data.message['row'], data.message['column'], data.message['value'])
-        }
+        updateClocks(data.clock);
       }
     },
     error: function (request, status, error) { console.log(status + ", " + error); }
@@ -71,6 +63,18 @@ var lsecs = document.getElementById('lsec');
 
 //set interval to display new time every second
 var timer = setInterval(displayTime, 1000);
+
+//websocket used to exchange integration times
+var ws = new WebSocket('ws://' + document.domain + ':' + location.port + '/spectrometers');
+ws.onmessage = function (evenet) {
+    var data = JSON.parse(event.data);
+    var spec = data[0];
+    var key = data[1];
+    var value = data[2];
+    var idx = spec + '-' + key
+    cell = document.getElementById(idx);
+    cell.innerHTML = value;
+};
 
 /*Function to display time with one second increment
 */
@@ -151,7 +155,6 @@ function updateEditable(editable){
 
 }
 
-
 /*updates the status table of the record-table footer
 
 params:
@@ -171,36 +174,6 @@ function updateTableFooter(status, state){
   $('#record-table-statusinfo').html(statusinfo);
 }
 
-/* Updates one integration value if it doesn't correspend to input value
-Only uptdates is user is currently not typing in this field
-
-params:
-  row - row of value
-  col - column of value
-  val - new value
- */
-function updateIntegrationValue(row, column, value){
-  cell=$('#'+row+'-'+column);
-  hasFocus = cell.is(':focus'); //is user currently typing?
-  if (cell.html() != value && !hasFocus){ //if value has not been updated and user is not typing in the field
-    cell.html(value);
-  }
-}
-
-/*Function to update integration values in table
-param:
-  values - 2D array, means list of rows with lists of columns
-*/
-function updateIntegrationValues(values){
-  for(var i = 0; i < values.length; i++) {
-    var row = values[i];
-    for(var j = 0; j < row.length; j++) {
-        updateIntegrationValue(i,j,row[j])
-    }
-}
-
-}
-
 
 $(document).ready(function() {
   /* Check if enter is pressed for an integration value.
@@ -209,38 +182,12 @@ $(document).ready(function() {
  $('.table-editable span').keydown(function(e) {
      if(e.which == 13) { //enter key is 13
         $(this).blur().next().focus();
-        val= $(this).text();
-        id = $(this).attr('id').split('-'); //get row and column from id
-        submitIntegration(id[0],id[1],val);
-
+         val= $(this).text();
+	 id = $(this).attr('id').split('-'); //get spectrometer and key from id
+	 var data = JSON.stringify([id[0],id[1],val]);
+	 ws.send(data);
       }
  });
  })
-
-
-/* Function to submit new integration value
-
-params:
-  row - row of value
-  col - column of value
-  val - new value
-*/
- function submitIntegration(row, col, value){
-     $.ajax({
-     url: "integration?"+'column='+col+'&row='+row+'&value='+value,
-     cache: false,
-     dataType: "json",
-     method: "POST",
-     success: function(data) {
-       if(data.message){
-         $('#record-msg').html(data.message+ ', Status code: '+ data.status_code);
-       }else{
-         $('#record-msg').html('Successfully submitted value: '+value);
-       }
-     },
-     error: function (request, status, error) { console.log(status + ", " + error); }
-   });
- }
-
 
 /* END Record Table --------------------------------------------------------- */

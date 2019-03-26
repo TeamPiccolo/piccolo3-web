@@ -21,8 +21,8 @@
     <div class="row">
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
         <div class="info-box dark-bg">
-          <i id='status-icon' style="color: {{statusInfo['state']}};" class="fa fa-leaf"></i>
-            <div><h4>Status</h4><p id='status'>{{statusInfo['status']}}</p></div>
+          <i id='status-icon' style="color: {{ state }};" class="fa fa-leaf"></i>
+            <div><h4>Status</h4><p id='status'>{{ status }}</p></div>
         </div>
         <!--/.info-box-->
       </div>
@@ -82,22 +82,25 @@
           <table class="table" id='record-table'>
             <thead>
               <tr>
-                <th>
-                {% for shutter in integrationTimes['shutters'] %}
-                    <th>{{shutter}}</th>
+                <th></th>
+		<th>min</th>
+                {% for c in channels %}
+                <th>{{c}}</th>
                 {% endfor %}
+		<th>max</th>
               </tr>
             </thead>
             <tbody class="table-editable">
-              {% for values in integrationTimes['values'] %}
-                {% set cnt = loop.index0 %}
-                <tr>
-                <td>{{integrationTimes['spectrometers'][loop.index0] | replace("_", " ")}}</td>
-                {% for value in values %}
-                  <td><span id="{{cnt}}-{{loop.index0}}">{{value}}</span></td>
+              {% for s in spectrometers %}
+	      <tr>
+		<td>{{s}}</td>
+		<td><span id="{{s}}-min_time"></span></td>
+		{% for c in channels %}
+		<td><span id="{{s}}-current_time/{{c}}"></span></td>
                 {% endfor %}
-              </tr>
-              {% endfor %}
+		<td><span id="{{s}}-max_time"></span></td>
+	      </tr>
+	      {% endfor %}
             </tbody>
           </table>
           <p id='record-msg'></p>
@@ -107,56 +110,6 @@
                 <h2><i class="fa fa-info"  id='record-table-statusicon'></i><span  id='record-table-statusinfo'></span></h2>
               </div>
 
-        </div>
-      </div>
-      <div class="col-lg-5">
-        <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2><i class="fa fa-clock-o"></i><strong>Schedule:</strong></h2>
-          </div>
-        <div class="panel-body">
-            <form class="form-horizontal " action="#">
-              <!--date picker start-->
-
-              <div class="form-group">
-                <label class="control-label col-sm-4">Date</label>
-                <div class="col-sm-6">
-                  <input id="dp1" type="text" value="28-10-2013" size="16" class="form-control">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="control-label col-sm-4"> Date Range</label>
-                <div class="col-sm-6">
-                  <div class="input-prepend">
-                    <input id="reservation" type="text" class="form-control" />
-                  </div>
-                </div>
-              </div>
-              <!--date picker end-->
-                <!--check boxes-->
-                <div class="checkbox">
-                    <label>
-                       <input type="checkbox" value="">
-                         Run 1
-                      </label>
-                  </div>
-
-                  <div class="radio">
-                    <label>
-                      <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-                      Run 2
-                    </label>
-                  </div>
-                <!--check boxes end-->
-                <br>
-                <div class="col-lg-offset-4 col-lg-8">
-                  <button type="submit" class="btn btn-danger">Schedule</button>
-                </div>
-
-
-            </form>
-            </div>
         </div>
       </div>
 
@@ -175,9 +128,9 @@
 <script type="text/javascript">
 
 /* Read to configuration jinja parameters */
-var piccoloTime = '{{ piccoloTime }}';
-var status = "{{statusInfo['status']}}"
-var state = "{{statusInfo['state']}}"
+var piccoloTime = '{{ clock }}';
+var status = "{{ status }}"
+var state = "{{ state }}"
 
 </script>
 
