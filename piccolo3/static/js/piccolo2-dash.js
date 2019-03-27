@@ -27,7 +27,7 @@ params:
   status - boolean, status will be updated
   clock - boolean, clock will be updated
 */
-function getInfo(cpu, memory, status, clock){
+function getInfo(cpu, memory){
     $.ajax({
     url: "info",
     cache: false,
@@ -38,12 +38,6 @@ function getInfo(cpu, memory, status, clock){
       }
       if(memory){
         updateMemory(data.mem);
-      }
-      if(status){
-        updateStatus(data.status, data.state);
-      }
-      if(clock){
-        updateClocks(data.clock);
       }
     },
     error: function (request, status, error) { console.log(status + ", " + error); }
@@ -107,7 +101,7 @@ var usageTimer = setInterval(updateInfo, 2000);
 
 /*get new info*/
 function updateInfo(){
-  getInfo(true, true, true);
+  getInfo(true, true);
 }
 
 /*update cpu width and displayed value
@@ -129,6 +123,21 @@ function updateMemory(value){
   $('#memory').attr('aria-valuenow', value).css('width', value+'%');
   $('#memory').html(value+'%')
 }
+
+
+/* use websocket to update status */
+var ws_status = new WebSocket('ws://' + document.domain + ':' + location.port + '/status');
+ws_status.onmessage = function (evenet) {
+    var data = JSON.parse(event.data);
+    if ('status' in data) {
+	if (data.status == 'idle')
+	    state = 'green';
+	else
+	    state = 'orange';
+	updateStatus(data.status,state);
+    }
+};
+
 
 /* Function to update status in status widget
 

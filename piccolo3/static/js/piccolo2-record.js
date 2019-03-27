@@ -76,6 +76,20 @@ ws.onmessage = function (evenet) {
     cell.innerHTML = value;
 };
 
+var ws_status = new WebSocket('ws://' + document.domain + ':' + location.port + '/status');
+ws_status.onmessage = function (evenet) {
+    var data = JSON.parse(event.data);
+    if ('status' in data) {
+	if (data.status == 'idle')
+	    state = 'green';
+	else
+	    state = 'orange';
+	updateStatus(data.status, state);
+        updateTableFooter(data.status, state);
+        updateEditable(state=='green');
+    }
+};
+
 /*Function to display time with one second increment
 */
 function displayTime(){
@@ -109,10 +123,10 @@ function updateClocks(ptime){
 
 /*Loop to update status every second
 */
-var usageTimer = setInterval(updateInfo, 2000);
+/*var usageTimer = setInterval(updateInfo, 2000);
 function updateInfo(){
   getInfo(true);
-}
+}*/
 
 /* Function to update status in status widget
 
@@ -173,7 +187,6 @@ function updateTableFooter(status, state){
   statusinfo = '<strong>Status: </strong>' + status+ '; ' + msg;
   $('#record-table-statusinfo').html(statusinfo);
 }
-
 
 $(document).ready(function() {
   /* Check if enter is pressed for an integration value.

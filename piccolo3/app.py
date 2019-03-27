@@ -43,71 +43,65 @@ try:
 except:
     baseurl = 'coap://localhost'
 
-psys = piccolo.PiccoloSysinfo(baseurl)
-pctrl = piccolo.PiccoloControl(baseurl)
-pdata = piccolo.PiccoloDataDir(baseurl)
-pspec = piccolo.PiccoloSpectrometers(baseurl)
 
-async def get_info(sysinfo=True):
-    if sysinfo:
-        info = await psys.get_info()
-    else:
-        info = {}
-    info['clock'] = await psys.get_clock()
-    info['status'] = await pctrl.get_status()
-    if info['status'] == 'idle':
-        info['state']  = 'green'
-    else:
-        info['state'] = 'orange'
-    return info
+pclient = piccolo.PiccoloSystem(baseurl)
 
 @app.route('/info',methods=['GET'])
 async def info():
     '''get json info'''
-    sysinfo = request.args.get('sysinfo',default=1,type=int)
-    info = await get_info(sysinfo==1)
+    info = await pclient.sys.get_info()
     return jsonify(info)
 
 @app.route('/', methods=['GET'])
 async def index():
     '''HTML for index page of the dashboard'''
-    info = await get_info(True)
-    extra_info = {}
-    extra_info['datadir'] = await pdata.get_datadir()
-    extra_info['host'] = await psys.get_host()
-    extra_info['server_version'] = await psys.get_server_version()
-    extra_info['client_version'] = piccolo.__version__
-    return await render_template('index.html',**info, **extra_info)
+    info = await pclient.sys.get_info()
+    info['clock'] = await pclient.sys.get_clock()
+    info['datadir'] = await pclient.data.get_datadir()
+    info['host'] = await pclient.sys.get_host()
+    info['server_version'] = await pclient.sys.get_server_version()
+    info['client_version'] = piccolo.__version__
+    return await render_template('index.html',**info)
 
-spectrometer_connected = set()
-def collect_spectrometer_ws(func):
-    @wraps(func)
-    async def wrapper(*args,**kwargs):
-        global spectrometer_connected
-        spectrometer_connected.add(websocket._get_current_object())
-        try:
-            return await func(*args,**kwargs)
-        finally:
-            spectrometer_connected.remove(websocket._get_current_object())
-    return wrapper
+class PiccoloWebsocket:
+    def __init__(self,cb):
+        self._connected_ws = set()
+        # register callback
+        cb(self.update)
 
-async def spectrometer_changed(message):
-    for ws in spectrometer_connected:
-        await ws.send(message)
+    def __call__(self,func):
+        @wraps(func)
+        async def wrapper(*args,**kwargs):
+            self._connected_ws.add(websocket._get_current_object())
+            try:
+                return await func(*args,**kwargs)
+            finally:
+                self._connected_ws.remove(websocket._get_current_object())
+        return wrapper
+        
+    async def update(self,message):
+        for ws in self._connected_ws:
+            await ws.send(message)
 
-pspec.register_callback(spectrometer_changed)
+status_ws = PiccoloWebsocket(pclient.control.register_callback)
+@app.websocket('/status')
+@status_ws
+async def status():            
+    while True:
+        msg = await websocket.receive()
 
+spectrometer_ws = PiccoloWebsocket(pclient.spec.register_callback)
 @app.websocket('/spectrometers')
-@collect_spectrometer_ws
+@spectrometer_ws
 async def spectrometers():
-    channels = await pspec.get_channels()
-    for spec in pspec.keys():
+    channels = await pclient.spec.get_channels()
+    for spec in pclient.spec.keys():
         for k in ['min_time','max_time']:
-            v = await pspec[spec].a_get(k)
+            v = await pclient.spec[spec].a_get(k)
             await websocket.send(json.dumps((spec,k,v)))
         for c in channels:
             k = 'current_time/'+c
-            v = await pspec[spec].a_get(k)
+            v = await pclient.spec[spec].a_get(k)
             await websocket.send(json.dumps((spec,k,v)))
     while True:
         msg = await websocket.receive()
@@ -121,27 +115,32 @@ async def spectrometers():
             app.logger.error(error)
             continue
         app.logger.info('received spectrometer_ws: %s'%msg)
-        if spec not in pspec:
+        if spec not in pclient.spec:
             error = 'no such spectrometer %s'%spec
             app.logger.error(error)
             continue
         try:
-            await pspec[spec].a_put(key,value)
+            await pclient.spec[spec].a_put(key,value)
         except Exception as e:
             # log error and restore current value
             error = str(e)
             app.logger.error(error)
-            v = await pspec[spec].a_get(key)
+            v = await pclient.spec[spec].a_get(key)
             await websocket.send(json.dumps((spec,key,v)))
             continue
         
 @app.route('/record', methods=['GET'])
 async def record():
     '''Renders HTML for record page'''
-    info = await get_info(False)
-    channels = await pspec.get_channels()
-    spectrometers = await pspec.get_spectrometers()
-    return await render_template('record.html', **info, channels=channels, spectrometers = spectrometers)
+    clock = await pclient.sys.get_clock()
+    channels = await pclient.spec.get_channels()
+    spectrometers = await pclient.spec.get_spectrometers()
+    current_run = await pclient.data.get_current_run()
+    return await render_template('record.html', 
+                                 clock = clock,
+                                 channels=channels,
+                                 spectrometers = spectrometers,
+                                 current_run = current_run)
 
 if __name__ == '__main__':
     import uvicorn

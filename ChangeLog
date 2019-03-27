@@ -1,3 +1,12 @@
+2019-03-27 Magnus Hagdorn
+ * README.md: document how to start web app
+ * piccolo3/app.py: use single piccolo client object; info endpoint only
+   reports system CPU and memory usage; use websocket to update status; add
+   piccolo observe websocket decorator
+ * piccolo3/static/js/piccolo2-dash.js: get status from status websocket; only
+   update CPU/mem by polling
+ * piccolo3/static/js/piccolo2-record.js: get status from status websocket
+
 2019-03-26 Magnus Hagdorn
  * piccolo3/web: tidied away
 

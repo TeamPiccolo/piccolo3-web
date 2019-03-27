@@ -28,9 +28,5 @@ Set up web (within piccolo2-web)
 
 Run webapp:
 ```
->>> piccolo2-web -u http://piccolo8:8080
-```
-Run webapp with development server:
-```
->>> piccolo2-web -u http://piccolo-dev:8080
+>>> PICCOLO=coap://piccolo-thing2 uvicorn piccolo3.app:app --host 0.0.0.0 --port 8000 --loop asyncio   --reload
 ```
