@@ -83,13 +83,37 @@ class PiccoloWebsocket:
         for ws in self._connected_ws:
             await ws.send(message)
 
-status_ws = PiccoloWebsocket(pclient.control.register_callback)
-@app.websocket('/status')
-@status_ws
-async def status():            
+piccolo_ws = PiccoloWebsocket(pclient.control.register_callback)
+@app.websocket('/piccolo')
+@piccolo_ws
+async def piccolo_ctrl():
+    s = await pclient.control.get_status()
+    await websocket.send(json.dumps({'status':s}))
     while True:
         msg = await websocket.receive()
+        try:
+            cmd,args = json.loads(msg)
+        except:
+            error = 'could not parse message %s'%msg
+            app.logger.error(error)
+            continue
+        app.logger.info('received piccolo_ws %s'%msg)
+        if cmd == 'record':
+            try:
+                await pclient.control.record_sequence(**args)
+            except Exception as e:
+                app.logger.error(str(e))
+                continue
+        if cmd == 'dark':
+            try:
+                await pclient.control.record_dark(**args)
+            except Exception as e:
+                app.logger.error(str(e))
+                continue
+        else:
+            app.logger.error('unkown command %s'%msg)
 
+        
 spectrometer_ws = PiccoloWebsocket(pclient.spec.register_callback)
 @app.websocket('/spectrometers')
 @spectrometer_ws

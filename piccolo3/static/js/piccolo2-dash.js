@@ -126,7 +126,7 @@ function updateMemory(value){
 
 
 /* use websocket to update status */
-var ws_status = new WebSocket('ws://' + document.domain + ':' + location.port + '/status');
+var ws_status = new WebSocket('ws://' + document.domain + ':' + location.port + '/piccolo');
 ws_status.onmessage = function (evenet) {
     var data = JSON.parse(event.data);
     if ('status' in data) {

@@ -1,3 +1,10 @@
+2019-03-27 Mangus Hagdorn
+ * piccolo3/app.py: rename status websocket; control record sequence and dark
+ * piccolo3/static/js/piccolo2-dash.js: rename status websocket
+ * piccolo3/static/js/piccolo2-record.js: rename status websocket; deal with
+   buttons
+ * piccolo3/templates/record.html: add buttons
+
 2019-03-27 Magnus Hagdorn
  * README.md: document how to start web app
  * piccolo3/app.py: use single piccolo client object; info endpoint only

@@ -72,12 +72,12 @@ ws.onmessage = function (evenet) {
     var key = data[1];
     var value = data[2];
     var idx = spec + '-' + key
-    cell = document.getElementById(idx);
+    var cell = document.getElementById(idx);
     cell.innerHTML = value;
 };
 
-var ws_status = new WebSocket('ws://' + document.domain + ':' + location.port + '/status');
-ws_status.onmessage = function (evenet) {
+var ws_piccolo = new WebSocket('ws://' + document.domain + ':' + location.port + '/piccolo');
+ws_piccolo.onmessage = function (event) {
     var data = JSON.parse(event.data);
     if ('status' in data) {
 	if (data.status == 'idle')
@@ -87,6 +87,7 @@ ws_status.onmessage = function (evenet) {
 	updateStatus(data.status, state);
         updateTableFooter(data.status, state);
         updateEditable(state=='green');
+	updateButtons(state=='green');
     }
 };
 
@@ -120,13 +121,6 @@ function updateClocks(ptime){
 /* End times ------------------------------------------------------------------ */
 
 /* Status --------------------------------------------------------- */
-
-/*Loop to update status every second
-*/
-/*var usageTimer = setInterval(updateInfo, 2000);
-function updateInfo(){
-  getInfo(true);
-}*/
 
 /* Function to update status in status widget
 
@@ -187,6 +181,37 @@ function updateTableFooter(status, state){
   statusinfo = '<strong>Status: </strong>' + status+ '; ' + msg;
   $('#record-table-statusinfo').html(statusinfo);
 }
+
+/* deal with buttons */
+function updateButtons(idle){
+    if (idle) {
+	$('#runButton').prop('disabled', false);
+	$('#pauseButton').prop('disabled', true);
+	$('#stopButton').prop('disabled', true);
+	$('#autoButton').prop('disabled', false);
+    }
+    else {
+	$('#runButton').prop('disabled', true);
+	$('#pauseButton').prop('disabled', false);
+	$('#stopButton').prop('disabled', false);
+	$('#autoButton').prop('disabled', true);
+    }
+}
+
+
+$('#runButton').on('click', function() {
+    var msg = JSON.stringify(['record',{'run':document.getElementById('run').value,
+					'nsequence':parseInt(document.getElementById('nseq').value),
+					'auto':parseInt(document.getElementById('auto').value),
+					'delay': parseFloat(document.getElementById('delay').value),
+				       }]);
+    ws_piccolo.send(msg);
+});
+
+$('#darkButton').on('click', function() {
+    var msg = JSON.stringify(['dark',{'run':document.getElementById('run').value}]);
+    ws_piccolo.send(msg);
+});
 
 $(document).ready(function() {
   /* Check if enter is pressed for an integration value.

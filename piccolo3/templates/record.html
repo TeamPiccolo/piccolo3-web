@@ -113,6 +113,64 @@
         </div>
       </div>
 
+
+      <div class="col-lg-5">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2><i class="fa fa-clock-o"></i><strong>Control:</strong></h2>
+          </div>
+        <div class="panel-body">
+            <form class="form-horizontal " action="#">
+              <!--date picker start-->
+
+              <div class="form-group">
+                <label class="control-label col-sm-4">Run</label>
+                <div class="col-sm-6">
+                  <input id="run" type="text" value="{{ current_run }}" size="16" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="control-label col-sm-4">Number of Sequences</label>
+                <div class="col-sm-6">
+		  <input id="nseq" class="quantity" min="1" name="quantity" value="1" type="number">
+                </div>
+              </div>
+
+	      
+              <div class="form-group">
+                <label class="control-label col-sm-4">Autointegration</label>
+                <div class="col-sm-6">
+		  <input id="auto" class="quantity" min="-1" name="quantity" value="-1" type="number">
+                </div>
+              </div>
+	      
+              <div class="form-group">
+                <label class="control-label col-sm-4">Delay</label>
+                <div class="col-sm-6">
+		  <input id="delay" class="quantity" min="0.0" name="quantity" value="0.0" type="number" step = "0.1">
+                </div>
+              </div>
+
+	      
+                <!--input fields end-->
+                <br>
+                <div class="col-lg-10">
+                  <button type="button" id="runButton" class="btn btn-success">Run</button>
+		  <button type="button" id="stopButton" class="btn btn-danger" disabled>Stop</button>
+		  <button type="button" id="pauseButton" class="btn btn-warning" disabled>Pause</button>
+		  <button type="button" id="darkButton" class="btn btn-dark">Dark</button>
+		  <button type="button" id="autoButton" class="btn btn-info">Auto</button>
+                </div>
+
+
+            </form>
+            </div>
+        </div>
+      </div>
+
+
+      
     </div>
 
   </section>
