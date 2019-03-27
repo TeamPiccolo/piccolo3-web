@@ -104,7 +104,7 @@ async def piccolo_ctrl():
             except Exception as e:
                 app.logger.error(str(e))
                 continue
-        if cmd == 'dark':
+        elif cmd == 'dark':
             try:
                 await pclient.control.record_dark(**args)
             except Exception as e:

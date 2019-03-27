@@ -18,36 +18,6 @@
 *////////////////////////////////////////////////////////////////////////
 
 
-
-/* Queries piccolo info, the params determine which info will be updated
-
-params:
-status - boolean, status will be updated
-clock - boolean, clock will be updated
-record - boolean, integration values will be updated
-
-*/
-function getInfo(status, clock){
-    $.ajax({
-    url: "info?sysinfo=0",
-    cache: false,
-    dataType: "json",
-    success: function(data) {
-      if(status){
-        updateStatus(data.status, data.state);
-        updateTableFooter(data.status, data.state);
-        updateEditable(data.state=='green');
-      }
-      if(clock){
-        updateClocks(data.clock);
-      }
-    },
-    error: function (request, status, error) { console.log(status + ", " + error); }
-  });
-}
-
-
-
 /* Times ------------------------------------------------------------------ */
 var date = new Date(piccoloTime)
 date.setSeconds(date.getSeconds()+1) // add one to sychronise
@@ -140,7 +110,6 @@ function updateStatus(status, state){
 
 // initial calls for integration record table
 updateTableFooter(status, state);
-updateEditable(state=='green');
 
 /* changes record to editable / not editable.
 
@@ -217,7 +186,7 @@ $(document).ready(function() {
   /* Check if enter is pressed for an integration value.
   Calls submitIngegration if the enter key is pressed
   */
- $('.table-editable span').keydown(function(e) {
+    $('.table-editable span').keydown(function(e) {
      if(e.which == 13) { //enter key is 13
         $(this).blur().next().focus();
          val= $(this).text();
