@@ -1,4 +1,7 @@
 2019-03-29 Magnus Hagdorn
+ * piccolo3/templates/layout.html: fix names
+
+2019-03-29 Magnus Hagdorn
  * piccolo3/app.py: add routes to download data; add route to display results
  * piccolo3/static/js/piccolo2-results.js: make it work with piccolo3 web app
  * piccolo3/templates/results.html: adjust variable names
