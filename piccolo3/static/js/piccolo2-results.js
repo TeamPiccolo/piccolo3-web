@@ -42,16 +42,16 @@ function getSpectraList(run, tryNumber){
   if(!tryNumber){
     tryNumber=1; //first try
   }
-  url="spectraList"
+  url="data/"
   if (run != null){ // add run to URL if given
-    url = url + "?run="+run.value;
+    url = url +run.value;
   }
   $.ajax({
   url: url,
   cache: false,
   dataType: "json",
-  success: function(data) {
-    createSpectraListHtml(data.spectraList);
+      success: function(data) {
+      createSpectraListHtml(run.value,data);
   },
   error: function (request, status, error) { //fail
     console.log(status + ", " + error);
@@ -71,11 +71,11 @@ function getSpectraList(run, tryNumber){
 param:
   spectraList - a list with spectra names
 */
-function createSpectraListHtml(spectraList){
-  ele = document.getElementById('spectraList');
+function createSpectraListHtml(run,spectraList){
+    ele = document.getElementById('spectraList');
   html=''
   spectraList.forEach(function(file) {
-    html = html + '<tr><th onclick="getSpectrum(this)" style="cursor: pointer;">'+file+'</th></tr>'
+html = html + '<tr><th data-run="'+run+'" onclick="getSpectrum(this)" style="cursor: pointer;">'+file+'</th></tr>'
   });
   ele.innerHTML=html;
 }
@@ -89,26 +89,27 @@ params:
   tryNumber - optional, default 1
 */
 function getSpectrum(ele, tryNumber){
+    run = ele.getAttribute('data-run');
   if(!tryNumber){
     tryNumber=1; //first try
   }
-  var spectra;
+    var spectra;
   if(ele.tagName==='TH'){
     spectra = ele.innerHTML;
-    url="result"+"?spectraName="+spectra;
+    url="data/"+run+"/"+spectra+"?data=plot_all";
   }else if (ele.tagName==='SELECT'){
     spectra=$(ele).find(':selected').data('spectra');
     direction = $(ele).find(':selected').data('direction');
-    url="result"+"?spectraName="+spectra+'&direction='+direction;
+      url="data/"+run+"/"+spectra+"?data=plot_"+direction;
   }
   $.ajax({
   url: url,
   cache: false,
   dataType: "json",
   success: function(data) {
-    document.getElementById('result-file').innerHTML = spectra;
-    createChart(data.data);
-    generateSelect(data.data, spectra);
+      document.getElementById('result-file').innerHTML = spectra;
+    createChart(data);
+      generateSelect(data, spectra, run);
   },
   error: function (request, status, error) { //fail
     console.log(status + ", " + error);
@@ -136,10 +137,10 @@ param:
   data - a list with different datasets in JSON format, returned by the Api
   spectraName - the spectra name of the displayed chart
 */
-function generateSelect(data, spectraName){
+function generateSelect(data, spectraName, run){
   ele = document.getElementById('select-direction');
-  directions=data[0].Directions
-  html='<select onchange="getSpectrum(this)" class="form-control" style="width: 50%; margin-left: 50px;">'
+    directions=data[0].Directions;
+  html='<select data-run="'+run+'" onchange="getSpectrum(this)" class="form-control" style="width: 50%; margin-left: 50px;">'
   for(i=0; i<directions.length; i++){
     html=html+'<option data-spectra="'+spectraName+'" data-direction="'+directions[i]+'"';
     if(directions[i]===data[0].Metadata.Direction){
@@ -201,7 +202,7 @@ function createChart(data){
   saturation = highestSaturation(data); // get saturation
 
   // set chart title to time and Dark/Light
-  var title;
+    var title;
   if(data[0].Metadata.Dark){
     title=data[data.length-1].Metadata.Datetime + ': Dark'
   }else{

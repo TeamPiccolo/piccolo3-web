@@ -51,7 +51,7 @@
                                           </thead>
                                           <tbody id="spectraList" class>
                                             {% for file in spectraList %}
-                                                <tr><th onclick="getSpectrum(this)" style="cursor: pointer;">{{file}}</th></tr>
+                                                <tr><th data-run="{{currentRun}}" onclick="getSpectrum(this)" style="cursor: pointer;">{{file}}</th></tr>
                                             {% endfor %}
                                           </tbody>
                                         </table>

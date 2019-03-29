@@ -32,6 +32,7 @@ App Endpoints:
 
 import argparse, os, json
 from piccolo3 import client as piccolo
+from piccolo3.common import PiccoloSpectraList
 from quart import Quart, render_template, jsonify,request, websocket, copy_current_websocket_context
 from functools import wraps
 import asyncio
@@ -165,6 +166,129 @@ async def record():
                                  channels=channels,
                                  spectrometers = spectrometers,
                                  current_run = current_run)
+
+@app.route('/results',methods=['GET'])
+async def results():
+    '''Renders HTML for results page'''
+
+    runList = await pclient.data.get_runs()
+    currentRun = await pclient.data.get_current_run()
+    spectraList = await currentRun.get_spectra_list()
+
+    return await render_template('results.html',runList=runList,
+                                 currentRun = currentRun.name,
+                                 spectraList = spectraList)
+
+@app.route('/data',methods=['GET'])
+async def get_runs():
+    '''return list of runs'''
+
+    current_run = request.args.get('current',default=0,type=int)
+
+    if current_run == 1:
+        data = await pclient.data.get_current_run()
+        data = data.name
+    else:
+        data = await pclient.data.get_runs()
+
+    return jsonify(data)
+
+@app.route('/data/<run>',methods=['GET'])
+async def get_run(run):
+    '''return list of spectra'''
+
+    if run not in pclient.data:
+        raise APIRequestException('no such run %s'%run)
+
+    data = await pclient.data[run].get_spectra_list()
+
+    return jsonify(data)
+
+@app.route('/data/<run>/<spectra>',methods=['GET'])
+async def get_spectra(run,spectra):
+    '''return list of spectra'''
+
+    data_type = request.args.get('data',default='raw')
+    
+    if run not in pclient.data:
+        raise APIRequestException('no such run %s'%run)
+    
+    spectra = await pclient.data[run].get_spectra(spectra)
+
+    if data_type == 'raw':
+        return spectra
+    else:
+        spectra = PiccoloSpectraList(data=spectra)
+        if data_type.startswith('plot_'):
+            d = data_type[5:]
+            if d == 'all':
+                directions = spectra.directions
+            else:
+                directions = [d]
+            data = []
+            for d in directions:
+                for s in ['Dark','Light']:
+                    for spec in spectra.getSpectra(d,s):
+                        xy = []
+                        p = spec.pixels
+                        w = spec.waveLengths
+                        for i in range(len(p)):
+                            xy.append({'x':int(w[i]),'y':int(p[i])})
+                        sDict = spec.as_dict(pixelType='list')
+                        sDict['plotList'] = xy
+                        sDict['Directions'] = spectra.directions
+                        data.append(sDict)
+            return jsonify(data)
+        
+    raise APIRequestException('unknown request %s'%data_type)
+    
+## Error Handling
+
+class APIRequestException(Exception):
+    '''Exception class for API Exceptions
+    
+    Inherits from Exceptions    
+    
+    Use:
+        raise APIRequestException('Error message', status_code=XXX)
+    
+    '''
+    
+    def __init__(self, message, status_code=400):
+        '''
+        Input Parameters:
+            message (str) - Error message
+            status_code (int) - (optional) status code of the occurred error
+        
+        '''
+        Exception.__init__(self)
+        self.message = message
+        self.status_code = status_code
+
+    def to_dict(self):
+        '''Converts the error message to a dictionnary
+        
+        Returns:
+            dict - a dictionnary of the Error
+        '''
+        rv = dict(())
+        rv['message'] = self.message
+        rv['status_code'] = self.status_code
+        return rv
+
+
+@app.errorhandler(APIRequestException)
+def handle_apiRequestException(error):
+    '''error handler to handle the APIRequestException
+    
+    Response:
+        a JSON with information about the occurred Error
+    '''
+    response = error.to_dict()
+    response = jsonify(response)
+    return response
+
+
 
 if __name__ == '__main__':
     import uvicorn
