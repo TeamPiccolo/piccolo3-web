@@ -1,3 +1,8 @@
+2019-04-17 Magnus Hagdorn
+ * piccolo3/app.py: deal with autointegration status
+ * piccolo3/static/js/piccolo2-record.js: hook up autointegration button;
+   colour current integration times depending on autointegration status
+
 2019-03-29 Magnus Hagdorn
  * piccolo3/templates/layout.html: fix names
 

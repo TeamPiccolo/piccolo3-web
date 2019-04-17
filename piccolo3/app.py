@@ -111,6 +111,12 @@ async def piccolo_ctrl():
             except Exception as e:
                 app.logger.error(str(e))
                 continue
+        elif cmd == 'auto':
+            try:
+                await pclient.control.auto()
+            except Exception as e:
+                app.logger.error(str(e))
+                continue
         else:
             app.logger.error('unkown command %s'%msg)
 
@@ -125,9 +131,10 @@ async def spectrometers():
             v = await pclient.spec[spec].a_get(k)
             await websocket.send(json.dumps((spec,k,v)))
         for c in channels:
-            k = 'current_time/'+c
-            v = await pclient.spec[spec].a_get(k)
-            await websocket.send(json.dumps((spec,k,v)))
+            for m in ['current_time','autointegration']:
+                k = m+'/'+c
+                v = await pclient.spec[spec].a_get(k)
+                await websocket.send(json.dumps((spec,k,v)))
     while True:
         msg = await websocket.receive()
         try:

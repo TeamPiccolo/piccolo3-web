@@ -39,11 +39,32 @@ var ws = new WebSocket('ws://' + document.domain + ':' + location.port + '/spect
 ws.onmessage = function (evenet) {
     var data = JSON.parse(event.data);
     var spec = data[0];
-    var key = data[1];
+    var key = data[1].split('/');
     var value = data[2];
-    var idx = spec + '-' + key
-    var cell = document.getElementById(idx);
-    cell.innerHTML = value;
+    
+    if (key[0] == 'autointegration') {
+	var idx = spec + '-current_time/' + key[1];
+	var cell = document.getElementById(idx);
+	if (value == 'n')
+	    var colour = 'black';
+	else if (value == 's')
+	    var colour = 'green';
+	else if (value == 'f')
+	    var colour = 'red';
+	else {
+	    var colour = 'black';
+	    console.log('unknown auto state: '+value);
+	}
+	cell.style.color = colour;
+    }
+    else {
+	if (key[0] == 'current_time')
+	    var idx = spec + '-' + key[0] + '/' + key[1];
+	else
+	    var idx = spec + '-' + key[0];
+	var cell = document.getElementById(idx);
+	cell.innerHTML = value;
+    }
 };
 
 var ws_piccolo = new WebSocket('ws://' + document.domain + ':' + location.port + '/piccolo');
@@ -179,6 +200,11 @@ $('#runButton').on('click', function() {
 
 $('#darkButton').on('click', function() {
     var msg = JSON.stringify(['dark',{'run':document.getElementById('run').value}]);
+    ws_piccolo.send(msg);
+});
+
+$('#autoButton').on('click', function() {
+    var msg = JSON.stringify(['auto',{}]);
     ws_piccolo.send(msg);
 });
 
