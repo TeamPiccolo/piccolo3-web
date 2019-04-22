@@ -208,6 +208,11 @@ $('#autoButton').on('click', function() {
     ws_piccolo.send(msg);
 });
 
+$('#pauseButton').on('click', function() {
+    var msg = JSON.stringify(['pause',{}]);
+    ws_piccolo.send(msg);
+});
+
 $(document).ready(function() {
   /* Check if enter is pressed for an integration value.
   Calls submitIngegration if the enter key is pressed
