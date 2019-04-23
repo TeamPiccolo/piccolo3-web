@@ -213,6 +213,11 @@ $('#pauseButton').on('click', function() {
     ws_piccolo.send(msg);
 });
 
+$('#stopButton').on('click', function() {
+    var msg = JSON.stringify(['abort',{}]);
+    ws_piccolo.send(msg);
+});
+
 $(document).ready(function() {
   /* Check if enter is pressed for an integration value.
   Calls submitIngegration if the enter key is pressed

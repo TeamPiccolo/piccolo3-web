@@ -123,6 +123,12 @@ async def piccolo_ctrl():
             except Exception as e:
                 app.logger.error(str(e))
                 continue
+        elif cmd == 'abort':
+            try:
+                await pclient.control.abort()
+            except Exception as e:
+                app.logger.error(str(e))
+                continue
         else:
             app.logger.error('unkown command %s'%msg)
 

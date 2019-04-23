@@ -1,3 +1,7 @@
+2019-04-23 Magnus Hagdorn
+ * piccolo3/app.py: call abort when requested
+ * piccolo3/static/js/piccolo2-record.js: hook up stop button
+
 2019-04-22 Magnus Hagdorn
  * piccolo3/app.py: call pause when requested
  * piccolo3/static/js/piccolo2-record.js: hook up pause button
