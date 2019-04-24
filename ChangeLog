@@ -1,4 +1,8 @@
 2019-04-24 Magnus Hagdorn
+ * piccolo3/static/js/piccolo2-record.js: handle saturation target settings
+ * piccolo3/templates/record.html: add entry field for saturation target
+
+2019-04-24 Magnus Hagdorn
  * piccolo3/app.py: observe current_run, numSequences, autointegration, delay
    and target settings; feed template those settings
  * piccolo3/static/js/piccolo2-record.js: deal with current_run, numSequence,

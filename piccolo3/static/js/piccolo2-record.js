@@ -92,9 +92,9 @@ ws_piccolo.onmessage = function (event) {
     if ('delay' in data) {
 	document.getElementById('delay').value = data.delay;
     }
-    /*if ('target' in data) {
-	document.getElementById('nseq').value = data.target;
-    }*/
+    if ('target' in data) {
+	document.getElementById('target').value = data.target;
+    }
 };
 
 /*Function to display time with one second increment
@@ -249,10 +249,10 @@ $('#delay').on('change', function() {
     ws_piccolo.send(msg);
 });
 
-/*$('#target').on('change', function() {
+$('#target').on('change', function() {
     var msg = JSON.stringify(['target',document.getElementById('target').value]);
     ws_piccolo.send(msg);
-});*/
+});
 
 $(document).ready(function() {
   /* Check if enter is pressed for an integration value.
