@@ -80,6 +80,21 @@ ws_piccolo.onmessage = function (event) {
         updateEditable(state=='green');
 	updateButtons(state=='green');
     }
+    if ('current_run' in data) {
+	document.getElementById('run').value = data.current_run;
+    }
+    if ('numSequences' in data) {
+	document.getElementById('nseq').value = data.numSequences;
+    }
+    if ('autointegration' in data) {
+	document.getElementById('auto').value = data.autointegration;
+    }
+    if ('delay' in data) {
+	document.getElementById('delay').value = data.delay;
+    }
+    /*if ('target' in data) {
+	document.getElementById('nseq').value = data.target;
+    }*/
 };
 
 /*Function to display time with one second increment
@@ -190,16 +205,12 @@ function updateButtons(idle){
 
 
 $('#runButton').on('click', function() {
-    var msg = JSON.stringify(['record',{'run':document.getElementById('run').value,
-					'nsequence':parseInt(document.getElementById('nseq').value),
-					'auto':parseInt(document.getElementById('auto').value),
-					'delay': parseFloat(document.getElementById('delay').value),
-				       }]);
+    var msg = JSON.stringify(['record',{ }]);
     ws_piccolo.send(msg);
 });
 
 $('#darkButton').on('click', function() {
-    var msg = JSON.stringify(['dark',{'run':document.getElementById('run').value}]);
+    var msg = JSON.stringify(['dark',{}]);
     ws_piccolo.send(msg);
 });
 
@@ -218,6 +229,31 @@ $('#stopButton').on('click', function() {
     ws_piccolo.send(msg);
 });
 
+$('#run').on('change', function() {
+    var msg = JSON.stringify(['current_run',document.getElementById('run').value]);
+    ws_piccolo.send(msg);
+});
+
+$('#nseq').on('change', function() {
+    var msg = JSON.stringify(['numSequences',document.getElementById('nseq').value]);
+    ws_piccolo.send(msg);
+});
+
+$('#auto').on('change', function() {
+    var msg = JSON.stringify(['autointegration',document.getElementById('auto').value]);
+    ws_piccolo.send(msg);
+});
+
+$('#delay').on('change', function() {
+    var msg = JSON.stringify(['delay',document.getElementById('delay').value]);
+    ws_piccolo.send(msg);
+});
+
+/*$('#target').on('change', function() {
+    var msg = JSON.stringify(['target',document.getElementById('target').value]);
+    ws_piccolo.send(msg);
+});*/
+
 $(document).ready(function() {
   /* Check if enter is pressed for an integration value.
   Calls submitIngegration if the enter key is pressed
@@ -230,7 +266,7 @@ $(document).ready(function() {
 	 var data = JSON.stringify([id[0],id[1],val]);
 	 ws.send(data);
       }
- });
+    });
  })
 
 /* END Record Table --------------------------------------------------------- */

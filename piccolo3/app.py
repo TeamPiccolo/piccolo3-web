@@ -85,8 +85,10 @@ class PiccoloWebsocket:
             await ws.send(message)
 
 piccolo_ws = PiccoloWebsocket(pclient.control.register_callback)
+pdata_ws = PiccoloWebsocket(pclient.data.register_callback)
 @app.websocket('/piccolo')
 @piccolo_ws
+@pdata_ws 
 async def piccolo_ctrl():
     s = await pclient.control.get_status()
     await websocket.send(json.dumps({'status':s}))
@@ -98,8 +100,38 @@ async def piccolo_ctrl():
             error = 'could not parse message %s'%msg
             app.logger.error(error)
             continue
-        app.logger.info('received piccolo_ws %s'%msg)
-        if cmd == 'record':
+        app.logger.info('received piccolo_ws {}({})'.format(cmd,args))
+        if cmd == 'current_run':
+            try:
+                await pclient.data.set_current_run(args)
+            except Exception as e:
+                app.logger.error(str(e))
+                continue
+        elif cmd == 'numSequences':
+            try:
+                await pclient.control.set_numSequences(args)
+            except Exception as e:
+                app.logger.error(str(e))
+                continue
+        elif cmd == 'autointegration':
+            try:
+                await pclient.control.set_autointegration(args)
+            except Exception as e:
+                app.logger.error(str(e))
+                continue
+        elif cmd == 'delay':
+            try:
+                await pclient.control.set_delay(args)
+            except Exception as e:
+                app.logger.error(str(e))
+                continue
+        elif cmd == 'target':
+            try:
+                await pclient.control.set_target(args)
+            except Exception as e:
+                app.logger.error(str(e))
+                continue
+        elif cmd == 'record':
             try:
                 await pclient.control.record_sequence(**args)
             except Exception as e:
@@ -180,11 +212,19 @@ async def record():
     channels = await pclient.spec.get_channels()
     spectrometers = await pclient.spec.get_spectrometers()
     current_run = await pclient.data.get_current_run()
+    numSequences = await pclient.control.get_numSequences()
+    auto = await pclient.control.get_autointegration()
+    delay = await pclient.control.get_delay()
+    target = await pclient.control.get_target()
     return await render_template('record.html', 
                                  clock = clock,
                                  channels=channels,
                                  spectrometers = spectrometers,
-                                 current_run = current_run)
+                                 current_run = current_run,
+                                 numSequences = numSequences,
+                                 auto = auto,
+                                 delay = delay,
+                                 target = target )
 
 @app.route('/results',methods=['GET'])
 async def results():
