@@ -32,6 +32,7 @@ setup(
         "quart",
         "pytz",
         "configobj",
+        "uvicorn",
     ],
     entry_points={
         'gui_scripts': [
