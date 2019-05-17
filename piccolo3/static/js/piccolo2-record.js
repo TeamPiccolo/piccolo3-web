@@ -57,6 +57,16 @@ ws.onmessage = function (evenet) {
 	}
 	cell.style.color = colour;
     }
+    else if (key[0] == 'status') {
+	var idx = '#'+spec + '-status-icon';
+	if (value=='idle')
+	    var colour = 'green';
+	else if (value=='disconnected')
+	    var colour = 'red';
+	else
+	    var colour = 'orange';
+	$(idx).css('color', colour);
+    }
     else {
 	if (key[0] == 'current_time')
 	    var idx = spec + '-' + key[0] + '/' + key[1];

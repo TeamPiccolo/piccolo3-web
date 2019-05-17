@@ -171,7 +171,7 @@ spectrometer_ws = PiccoloWebsocket(pclient.spec.register_callback)
 async def spectrometers():
     channels = await pclient.spec.get_channels()
     for spec in pclient.spec.keys():
-        for k in ['min_time','max_time']:
+        for k in ['min_time','max_time','status']:
             v = await pclient.spec[spec].a_get(k)
             await websocket.send(json.dumps((spec,k,v)))
         for c in channels:
