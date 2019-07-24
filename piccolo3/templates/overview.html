@@ -1,0 +1,52 @@
+    <div class="row">
+      <div class="col-lg-12">
+        <h3 class="page-header"><i class="fa fa-laptop"></i> Dashboard</h3>
+        <ol class="breadcrumb">
+          <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+          <li><i class="fa fa-laptop"></i>Dashboard</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+        <div class="info-box dark-bg">
+          <i id='status-icon' style="color: {{ state }};" class="fa fa-leaf"></i>
+            <div><h4>Status</h4><p id='status'>{{ status }}</p></div>
+        </div>
+        <!--/.info-box-->
+      </div>
+      <!--/.col-->
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+        <div class="info-box blue-bg">
+          <i class="fa fa-clock-o"></i>
+            <div><h4>Piccolo Time</h4>
+              <h3><span id='phours'>{{dt.hour}}</span>:<span id='pmin'>{{dt.minute}}</span>:<span id='psec'>{{dt.second}}</span>  <button type="button" id="syncButton" class="btn btn-info" style="visibility: hidden">sync</button></h3></div>
+
+        </div>
+        <!--/.info-box-->
+      </div>
+      <!--/.col-->
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+        <div class="info-box teal-bg">
+          <i class="fa fa-clock-o"></i>
+            <div><h4>Local Time</h4><h3><span id='lhours'>{{dt.hour}}</span>:<span id='lmin'>{{dt.minute}}</span>:<span id='lsec'>{{dt.second}}</span></h3></div>
+
+        </div>
+        <!--/.info-box-->
+      </div>
+      <!--/.col-->
+
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+        <div class="info-box green-bg">
+          <i class="fa fa-asterisk"></i>
+          <div><h4>Developed By</h4><p>The piccolo team</p></div>
+        </div>
+        <!--/.info-box-->
+      </div>
+      <!--/.col-->
+
+    </div>
+    <!--/.row-->

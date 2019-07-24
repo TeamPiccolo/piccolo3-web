@@ -17,23 +17,6 @@
 # along with piccolo2-web.  If not, see <http://www.gnu.org/licenses/>.
 *////////////////////////////////////////////////////////////////////////
 
-
-/* Times ------------------------------------------------------------------ */
-var date = new Date(piccoloTime)
-date.setSeconds(date.getSeconds()+1) // add one to sychronise
-
-//piccolo time html elements
-var phours = document.getElementById('phours');
-var pmins = document.getElementById('pmin');
-var psecs = document.getElementById('psec');
-//local time html elements
-var lhours = document.getElementById('lhours');
-var lmins = document.getElementById('lmin');
-var lsecs = document.getElementById('lsec');
-
-//set interval to display new time every second
-var timer = setInterval(displayTime, 1000);
-
 //websocket used to exchange integration times
 var ws = new WebSocket('ws://' + document.domain + ':' + location.port + '/spectrometers');
 ws.onmessage = function (evenet) {
@@ -105,50 +88,10 @@ ws_piccolo.onmessage = function (event) {
     if ('target' in data) {
 	document.getElementById('target').value = data.target;
     }
+    if ('timeChanged' in data) {
+	updateClocks(data.timeChanged);
+    }
 };
-
-/*Function to display time with one second increment
-*/
-function displayTime(){
-  date.setSeconds(date.getSeconds()+1);
-  phours.innerHTML=('0'+date.getHours()).slice(-2); //0 and slice is to format 1 to 01
-  pmins.innerHTML=('0'+date.getMinutes()).slice(-2);
-  psecs.innerHTML=('0'+date.getSeconds()).slice(-2);
-  //local time
-  ldate=new Date();
-  lhours.innerHTML=('0'+ldate.getHours()).slice(-2);
-  lmins.innerHTML=('0'+ldate.getMinutes()).slice(-2);
-  lsecs.innerHTML=('0'+ldate.getSeconds()).slice(-2);
-
-}
-
-/*updates/ synchronises the piccolo time
-
-param:
-  ptime - piccolo time, data string
-*/
-function updateClocks(ptime){
-  date = new Date(ptime);
-  date.setSeconds(date.getSeconds()+1); // add one to sychronise
-  displayTime();
-}
-
-
-/* End times ------------------------------------------------------------------ */
-
-/* Status --------------------------------------------------------- */
-
-/* Function to update status in status widget
-
-params:
-  status - written status (e.g. busy recording)
-  state - colour of status (e.g. green)
-  */
-function updateStatus(status, state){
-  $('#status').html(status)
-  $('#status-icon').css('color', state)
-}
-
 
 
 
@@ -268,6 +211,7 @@ $(document).ready(function() {
   /* Check if enter is pressed for an integration value.
   Calls submitIngegration if the enter key is pressed
   */
+    displayTime();
     $('.table-editable span').keydown(function(e) {
      if(e.which == 13) { //enter key is 13
         $(this).blur().next().focus();

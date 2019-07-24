@@ -1,4 +1,16 @@
 2019-07-24 Magnus Hagdorn
+ * piccolo3/app.py: pass curent time to record template
+ * piccolo3/static/js/piccolo2-dash.js: move overview handling functions to
+   new javascript file; run displayTime function when document is ready
+ * piccolo3/static/js/piccolo2-record.js: ditto
+ * piccolo3/templates/index.html: move overview HTML code to separate template
+   file and include it
+ * piccolo3/templates/record.html: ditto
+ * piccolo3/static/js/piccolo3-status.js: new js file to handle overview
+   functionality
+ * piccolo3/templates/overview.html: new overview template
+
+2019-07-24 Magnus Hagdorn
  * piccolo3/app.py: pass current time to template; handle request to sync
    clocks
  * piccolo3/static/js/piccolo2-dash.js: handle sync button

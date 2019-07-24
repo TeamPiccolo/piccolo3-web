@@ -219,6 +219,7 @@ async def spectrometers():
 async def record():
     '''Renders HTML for record page'''
     clock = await pclient.sys.get_clock()
+    dt = datetime.now()
     channels = await pclient.spec.get_channels()
     spectrometers = await pclient.spec.get_spectrometers()
     current_run = await pclient.data.get_current_run()
@@ -228,6 +229,7 @@ async def record():
     target = await pclient.control.get_target()
     return await render_template('record.html', 
                                  clock = clock,
+                                 dt = dt,
                                  channels=channels,
                                  spectrometers = spectrometers,
                                  current_run = current_run,

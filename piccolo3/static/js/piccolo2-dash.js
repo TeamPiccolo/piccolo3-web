@@ -45,64 +45,6 @@ function getInfo(cpu, memory){
 }
 
 
-
-
-
-/* Times ------------------------------------------------------------------ */
-var date = new Date(piccoloTime)
-date.setSeconds(date.getSeconds()+1) // add one to sychronise
-
-//piccolo time html elements
-var phours = document.getElementById('phours');
-var pmins = document.getElementById('pmin');
-var psecs = document.getElementById('psec');
-//local time html elements
-var lhours = document.getElementById('lhours');
-var lmins = document.getElementById('lmin');
-var lsecs = document.getElementById('lsec');
-
-var syncButton = document.getElementById('syncButton');
-
-//set interval to display new time every second
-var timer = setInterval(displayTime, 1000);
-
-/*Function to display time with one second increment
-*/
-function displayTime(){
-  date.setSeconds(date.getSeconds()+1);
-  phours.innerHTML=('0'+date.getHours()).slice(-2); //0 and slice is to format 1 to 01
-  pmins.innerHTML=('0'+date.getMinutes()).slice(-2);
-  psecs.innerHTML=('0'+date.getSeconds()).slice(-2);
-  //local time
-  ldate=new Date();
-  lhours.innerHTML=('0'+ldate.getHours()).slice(-2);
-  lmins.innerHTML=('0'+ldate.getMinutes()).slice(-2);
-  lsecs.innerHTML=('0'+ldate.getSeconds()).slice(-2);
-
-    
-    if (Math.abs(date.getTime() - ldate.getTime()) > 60000) {
-	syncButton.style.visibility = "visible";
-    }
-    else {
-	syncButton.style.visibility = "hidden";
-    }
-}
-
-/*updates/ synchronises the piccolo time
-
-param:
-  ptime - piccolo time, data string
-*/
-function updateClocks(ptime){
-  date = new Date(ptime);
-  date.setSeconds(date.getSeconds()+1); // add one to sychronise
-  displayTime();
-}
-/* End times ------------------------------------------------------------------ */
-
-
-
-
 /* Usage (CPU/Memory) --------------------------------------------------------- */
 
 /*set interval to display new info every second*/
@@ -147,28 +89,12 @@ ws_piccolo.onmessage = function (evenet) {
     }
     if ('timeChanged' in data) {
 	updateClocks(data.timeChanged);
-    }    
+    }
 };
-
-
-/* Function to update status in status widget
-
-params:
-  status - written status (e.g. busy recording)
-  state - colour of status (e.g. green)
-  */
-function updateStatus(status, state){
-  $('#status').html(status)
-  $('#status-icon').css('color', state)
-}
-
 
 
 /* END Usage (CPU/Memory) ------------------------------------------------------ */
 
-/* synchronize clock button */
-$('#syncButton').on('click', function() {
-    ldate=new Date();
-    var msg = JSON.stringify(['sync',{ 'time' : ldate.toISOString() }]);
-    ws_piccolo.send(msg);
-});
+$(document).ready(function() {
+    displayTime();
+})
