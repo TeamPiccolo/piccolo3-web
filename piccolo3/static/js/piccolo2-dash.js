@@ -61,6 +61,8 @@ var lhours = document.getElementById('lhours');
 var lmins = document.getElementById('lmin');
 var lsecs = document.getElementById('lsec');
 
+var syncButton = document.getElementById('syncButton');
+
 //set interval to display new time every second
 var timer = setInterval(displayTime, 1000);
 
@@ -77,6 +79,13 @@ function displayTime(){
   lmins.innerHTML=('0'+ldate.getMinutes()).slice(-2);
   lsecs.innerHTML=('0'+ldate.getSeconds()).slice(-2);
 
+    
+    if (Math.abs(date.getTime() - ldate.getTime()) > 60000) {
+	syncButton.style.visibility = "visible";
+    }
+    else {
+	syncButton.style.visibility = "hidden";
+    }
 }
 
 /*updates/ synchronises the piccolo time
@@ -126,8 +135,8 @@ function updateMemory(value){
 
 
 /* use websocket to update status */
-var ws_status = new WebSocket('ws://' + document.domain + ':' + location.port + '/piccolo');
-ws_status.onmessage = function (evenet) {
+var ws_piccolo = new WebSocket('ws://' + document.domain + ':' + location.port + '/piccolo');
+ws_piccolo.onmessage = function (evenet) {
     var data = JSON.parse(event.data);
     if ('status' in data) {
 	if (data.status == 'idle')
@@ -136,6 +145,9 @@ ws_status.onmessage = function (evenet) {
 	    state = 'orange';
 	updateStatus(data.status,state);
     }
+    if ('timeChanged' in data) {
+	updateClocks(data.timeChanged);
+    }    
 };
 
 
@@ -153,3 +165,10 @@ function updateStatus(status, state){
 
 
 /* END Usage (CPU/Memory) ------------------------------------------------------ */
+
+/* synchronize clock button */
+$('#syncButton').on('click', function() {
+    ldate=new Date();
+    var msg = JSON.stringify(['sync',{ 'time' : ldate.toISOString() }]);
+    ws_piccolo.send(msg);
+});

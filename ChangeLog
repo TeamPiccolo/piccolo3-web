@@ -1,3 +1,9 @@
+2019-07-24 Magnus Hagdorn
+ * piccolo3/app.py: pass current time to template; handle request to sync
+   clocks
+ * piccolo3/static/js/piccolo2-dash.js: handle sync button
+ * piccolo3/templates/index.html: add a sync button
+
 2019-05-20 Magnus Hagdorn
  * setup.py: depend on uvicorn
 

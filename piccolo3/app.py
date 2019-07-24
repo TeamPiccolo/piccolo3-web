@@ -31,6 +31,7 @@ App Endpoints:
 '''
 
 import argparse, os, json
+from datetime import datetime
 from piccolo3 import client as piccolo
 from piccolo3.common import PiccoloSpectraList
 from quart import Quart, render_template, jsonify,request, websocket, copy_current_websocket_context
@@ -58,6 +59,7 @@ async def index():
     '''HTML for index page of the dashboard'''
     info = await pclient.sys.get_info()
     info['clock'] = await pclient.sys.get_clock()
+    info['dt'] = datetime.now()
     info['datadir'] = await pclient.data.get_datadir()
     info['host'] = await pclient.sys.get_host()
     info['server_version'] = await pclient.sys.get_server_version()
@@ -161,6 +163,14 @@ async def piccolo_ctrl():
             except Exception as e:
                 app.logger.error(str(e))
                 continue
+        elif cmd == 'sync':
+            try:
+                await pclient.sys.set_clock(args['time'])
+            except Exception as e:
+                app.logger.error(str(e))
+            ptime = await pclient.sys.get_clock()
+            await websocket.send(json.dumps({'timeChanged':ptime}))
+            continue
         else:
             app.logger.error('unkown command %s'%msg)
 

@@ -32,7 +32,7 @@
         <div class="info-box blue-bg">
           <i class="fa fa-clock-o"></i>
             <div><h4>Piccolo Time</h4>
-              <h3><span id='phours'>00</span>:<span id='pmin'>00</span>:<span id='psec'>00</span></h3></div>
+              <h3><span id='phours'>{{dt.hour}}</span>:<span id='pmin'>{{dt.minute}}</span>:<span id='psec'>{{dt.second}}</span>  <button type="button" id="syncButton" class="btn btn-info" style="visibility: hidden">sync</button></h3></div>
 
         </div>
         <!--/.info-box-->
@@ -42,7 +42,7 @@
       <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
         <div class="info-box teal-bg">
           <i class="fa fa-clock-o"></i>
-            <div><h4>Local Time</h4><h3><span id='lhours'>00</span>:<span id='lmin'>00</span>:<span id='lsec'>00</span></h3></div>
+            <div><h4>Local Time</h4><h3><span id='lhours'>{{dt.hour}}</span>:<span id='lmin'>{{dt.minute}}</span>:<span id='lsec'>{{dt.second}}</span></h3></div>
 
         </div>
         <!--/.info-box-->
