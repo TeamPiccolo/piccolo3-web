@@ -1,3 +1,8 @@
+2019-07-26 Magnus Hagdorn
+ * piccolo3/templates/overview.html: remove bread crumbs
+ * piccolo3/templates/index.html: add bread crumbs - dashboard
+ * piccolo3/templates/record.html: add bread crumbs - record
+
 2019-07-24 Magnus Hagdorn
  * piccolo3/app.py: pass curent time to record template
  * piccolo3/static/js/piccolo2-dash.js: move overview handling functions to
