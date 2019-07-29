@@ -1,3 +1,9 @@
+2019-07-29 Magnus Hagdorn
+ * piccolo3/static/css/bootstrap-theme.css: update to boostrap 3.4.1
+ * piccolo3/static/css/bootstrap.min.css: ditto
+ * piccolo3/static/fonts/: ditto
+ * piccolo3/static/js/bootstrap.min.js: ditto
+
 2019-07-26 Magnus Hagdorn
  * piccolo3/templates/overview.html: remove bread crumbs
  * piccolo3/templates/index.html: add bread crumbs - dashboard
