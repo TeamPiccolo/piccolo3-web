@@ -1,4 +1,14 @@
 2019-07-30 Magnus Hagdorn
+ * piccolo3/app.py: populate scheduler template with piccolo control
+   parameters
+ * piccolo3/static/js/piccolo3-scheduler.js: handle controls to schedule a run
+ * piccolo3/templates/record.html: move form fields used for piccolo run
+   parameters to control.html template
+ * piccolo3/templates/scheduler.html: add panel for scheduling runs
+ * piccolo3/templates/control.html: new partial template for piccolo run
+   parameters
+
+2019-07-30 Magnus Hagdorn
  * piccolo3/app.py: register call back for scheduler; handle scheduler quiet
    time options
  * piccolo3/templates/layout.html: add scheduler page; use bootstrap-datetime

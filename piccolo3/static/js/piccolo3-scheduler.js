@@ -69,6 +69,40 @@ $('#quietEnd').datetimepicker({
 });
 
 
+$('#scheduleStart').datetimepicker({
+    defaultDate: new Date(),
+    format: 'YY/MM/DD HH:mm',
+});
+
+$('#scheduleEnd').datetimepicker({
+    format: 'YY/MM/DD HH:mm',
+    useCurrent: false
+});
+
+$('#scheduleButton').on('click', function() {
+    //var msg = JSON.stringify(['delay',document.getElementById('delay').value]);
+    //ws_piccolo.send(msg);
+    var data = {};
+    data.run = document.getElementById('run').value;
+    data.nsequence = document.getElementById('nseq').value;
+    data.auto = document.getElementById('auto').value;
+    data.delay = document.getElementById('delay').value;
+    data.target = document.getElementById('target').value;
+    data.at_time = $('#scheduleStart').data("DateTimePicker").date();
+    var interval = document.getElementById('scheduleInterval').value;
+    if (interval != "") {
+	data.interval= interval;
+    }
+    var end = $('#scheduleEnd').data("DateTimePicker").date();
+    if (end) {
+	data.end_time= end;
+    }
+    var msg = JSON.stringify(['record',data]);
+    ws_piccolo.send(msg);
+});
+
+
+
 $(document).ready(function() {
 
     document.getElementById('enableQ').checked = qtEnabled;
@@ -92,5 +126,11 @@ $(document).ready(function() {
 				       e.date._d.getUTCMinutes()]]);
 	    ws_piccolo.send(msg);
 	}); 
-
+    $("#scheduleStart").on("dp.change", function (e) {
+        $('#scheduleEnd').data("DateTimePicker").minDate(e.date);
+    });
+    $("#scheduleEnd").on("dp.change", function (e) {
+        $('#scheduleStart').data("DateTimePicker").maxDate(e.date);
+    });
+    
 });

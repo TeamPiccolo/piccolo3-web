@@ -265,6 +265,11 @@ async def scheduler():
     '''Renders HTML for scheduler page'''
     clock = await pclient.sys.get_clock()
     dt = datetime.datetime.now()
+    current_run = await pclient.data.get_current_run()
+    numSequences = await pclient.control.get_numSequences()
+    auto = await pclient.control.get_autointegration()
+    delay = await pclient.control.get_delay()
+    target = await pclient.control.get_target()
     qtEnabled = await pclient.scheduler.get_quietTimeEnabled()
     qtStart = await pclient.scheduler.get_quietStart()
     qtEnd = await pclient.scheduler.get_quietEnd()
@@ -272,6 +277,11 @@ async def scheduler():
     return await render_template('scheduler.html', 
                                  clock = clock,
                                  dt = dt,
+                                 current_run = current_run,
+                                 numSequences = numSequences,
+                                 auto = auto,
+                                 delay = delay,
+                                 target = target,
                                  qtEnabled = qtEnabled,
                                  qtStart = qtStart,
                                  qtEnd = qtEnd )

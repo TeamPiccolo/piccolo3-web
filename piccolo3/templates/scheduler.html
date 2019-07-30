@@ -64,7 +64,67 @@
 	    </form>
 	    
 	  </div>
-	</div>	
+	</div>
+	<!--/.panel-->
+      </div>
+      <!--/.col-->
+
+      <div class="col-lg-7">
+	<div class="panel panel-default">
+          <div class="panel-heading">
+            <h2><i class="fa fa-map-marker"></i><strong>Schedule Run</strong></h2>
+          </div>
+          <div class="panel-body">
+	    <form class="form-horizontal " action="#">
+
+	      {% include 'control.html' %}
+
+	      <div class="form-group">
+		<label class="control-label col-sm-4">schedule start</label>
+		<div class="col-sm-6">
+                  <div class='input-group date' id='scheduleStart'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+		</div>
+              </div>
+
+	       <div class="form-group">
+		 <label class="control-label col-sm-4">schedule interval</label>
+		 <div class="col-sm-6">
+		   <input id="scheduleInterval" class="quantity" min="0.0" name="quantity" type="number" step = "0.1">
+		 </div>
+	       </div>
+
+	       
+	       <div class="form-group">
+		<label class="control-label col-sm-4">schedule end</label>
+		<div class="col-sm-6">
+                  <div class='input-group date' id='scheduleEnd'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+		</div>
+              </div>
+
+
+	       <br>
+               <div class="col-lg-10">
+                 <button type="button" id="scheduleButton" class="btn btn-success">Schedule</button>
+               </div>
+
+	       
+	    </form>
+	    
+	  </div>
+	</div>
+	<!--/.panel-->
+
+	      
       </div>
       <!--/.col-->
     </div>
