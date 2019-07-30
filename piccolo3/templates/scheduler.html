@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+{% block head %}
+
+{% endblock %}
+{% block content %}
+
+<!--main content start-->
+<section id="main-content">
+  <section class="wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <h3 class="page-header"><i class="fa fa-laptop"></i> Scheduler</h3>
+        <ol class="breadcrumb">
+          <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+          <li><i class="fa fa-laptop"></i>Scheduler</li>
+        </ol>
+      </div>
+    </div>
+    
+    <!--overview start-->
+    {% include 'overview.html' %}
+
+    <div class="row">
+      <div class="col-lg-5">
+
+	<div class="panel panel-default">
+          <div class="panel-heading">
+            <h2><i class="fa fa-map-marker"></i><strong>Scheduler Quiet Time Settings</strong></h2>
+          </div>
+          <div class="panel-body">
+	    <form class="form-horizontal " action="#">
+
+	      <div class="form-group">
+		<label class="control-label col-sm-4">enable quiet time</label>
+		<div class="col-sm-6">
+		  <input id="enableQ" type="checkbox" value="" />
+		</div>
+	      </div>
+
+	      <div class="form-group">
+		<label class="control-label col-sm-4">start</label>
+		<div class="col-sm-6">
+                  <div class='input-group date' id='quietStart'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                  </div>
+		</div>
+              </div>
+	      
+	      <div class="form-group">
+		<label class="control-label col-sm-4">end</label>
+		<div class="col-sm-6">
+                  <div class='input-group date' id='quietEnd'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                  </div>
+		</div>
+              </div>
+
+	    </form>
+	    
+	  </div>
+	</div>	
+      </div>
+      <!--/.col-->
+    </div>
+    <!--/.row-->
+
+ 
+  </section>
+</section>
+<!--main content end-->
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script type="text/javascript">
+
+/* Read to configuration jinja parameters */
+  var piccoloTime = '{{ clock }}';
+  var status = "{{ status }}";
+  var state = "{{ state }}";
+  var qtEnabled = "{{ qtEnabled }}" == "True" ;
+  var qtStart = new Date();
+  qtStart.setUTCHours({{ qtStart.hour }}, {{ qtStart.minute }}, {{ qtStart.second }});
+  var qtEnd = new Date();
+  qtEnd.setUTCHours({{ qtEnd.hour }}, {{ qtEnd.minute }}, {{ qtEnd.second }});
+
+</script>
+
+<script src="{{ url_for('static', filename='js/piccolo3-overview.js') }}"></script>
+<script src="{{ url_for('static', filename='js/piccolo3-scheduler.js') }}"></script>
+
+{% endblock %}

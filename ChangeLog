@@ -1,3 +1,13 @@
+2019-07-30 Magnus Hagdorn
+ * piccolo3/app.py: register call back for scheduler; handle scheduler quiet
+   time options
+ * piccolo3/templates/layout.html: add scheduler page; use bootstrap-datetime
+   picker
+ * piccolo3/static/js/bootstrap-datetimepicker.min.js: add datetimepicker
+ * piccolo3/static/js/piccolo3-scheduler.js: new javascript to handle
+   scheduler options
+ * piccolo3/templates/scheduler.html: new template for scheduler
+
 2019-07-29 Magnus Hagdorn
  * piccolo3/static/css/bootstrap-theme.css: update to boostrap 3.4.1
  * piccolo3/static/css/bootstrap.min.css: ditto

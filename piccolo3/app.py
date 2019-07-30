@@ -31,7 +31,7 @@ App Endpoints:
 '''
 
 import argparse, os, json
-from datetime import datetime
+import datetime,pytz
 from piccolo3 import client as piccolo
 from piccolo3.common import PiccoloSpectraList
 from quart import Quart, render_template, jsonify,request, websocket, copy_current_websocket_context
@@ -88,9 +88,11 @@ class PiccoloWebsocket:
 
 piccolo_ws = PiccoloWebsocket(pclient.control.register_callback)
 pdata_ws = PiccoloWebsocket(pclient.data.register_callback)
+pscheduler_ws = PiccoloWebsocket(pclient.scheduler.register_callback)
 @app.websocket('/piccolo')
 @piccolo_ws
-@pdata_ws 
+@pdata_ws
+@pscheduler_ws
 async def piccolo_ctrl():
     s = await pclient.control.get_status()
     await websocket.send(json.dumps({'status':s}))
@@ -171,6 +173,26 @@ async def piccolo_ctrl():
             ptime = await pclient.sys.get_clock()
             await websocket.send(json.dumps({'timeChanged':ptime}))
             continue
+        elif cmd == 'quietTimeEnabled':
+            try:
+                await pclient.scheduler.set_quietTimeEnabled(args)
+            except Exception as e:
+                app.logger.error(str(e))
+            continue
+        elif cmd == 'quietTimeStart':
+            t = datetime.time(*args).replace(tzinfo=pytz.utc)
+            try:
+                await pclient.scheduler.set_quietStart(t)
+            except Exception as e:
+                app.logger.error(str(e))
+            continue
+        elif cmd == 'quietTimeEnd':
+            t = datetime.time(*args).replace(tzinfo=pytz.utc)
+            try:
+                await pclient.scheduler.set_quietEnd(t)
+            except Exception as e:
+                app.logger.error(str(e))
+            continue
         else:
             app.logger.error('unkown command %s'%msg)
 
@@ -219,7 +241,7 @@ async def spectrometers():
 async def record():
     '''Renders HTML for record page'''
     clock = await pclient.sys.get_clock()
-    dt = datetime.now()
+    dt = datetime.datetime.now()
     channels = await pclient.spec.get_channels()
     spectrometers = await pclient.spec.get_spectrometers()
     current_run = await pclient.data.get_current_run()
@@ -237,6 +259,22 @@ async def record():
                                  auto = auto,
                                  delay = delay,
                                  target = target )
+
+@app.route('/scheduler', methods=['GET'])
+async def scheduler():
+    '''Renders HTML for scheduler page'''
+    clock = await pclient.sys.get_clock()
+    dt = datetime.datetime.now()
+    qtEnabled = await pclient.scheduler.get_quietTimeEnabled()
+    qtStart = await pclient.scheduler.get_quietStart()
+    qtEnd = await pclient.scheduler.get_quietEnd()
+    
+    return await render_template('scheduler.html', 
+                                 clock = clock,
+                                 dt = dt,
+                                 qtEnabled = qtEnabled,
+                                 qtStart = qtStart,
+                                 qtEnd = qtEnd )
 
 @app.route('/results',methods=['GET'])
 async def results():

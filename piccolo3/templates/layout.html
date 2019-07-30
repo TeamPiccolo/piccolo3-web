@@ -19,8 +19,7 @@
 <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet" />
 
 <!-- Date range picker -->
-<link href="{{ url_for('static', filename='css/daterangepicker.css') }}" rel="stylesheet" />
-<link href="{{ url_for('static', filename='css/bootstrap-datepicker.css') }}" rel="stylesheet" />
+<link href="{{ url_for('static', filename='css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" />
 
   <!-- Custom CSS -->
 <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
@@ -65,6 +64,12 @@
                           <span>Record</span>
                       </a>
           </li>
+          <li {% if request.path == "/scheduler" %} class="active" {% endif %}>
+            <a class="" href="/scheduler">
+                          <i class="icon_mic_alt"></i>
+                          <span>Scheduler</span>
+                      </a>
+          </li>
           <li {% if request.path == "/results" %} class="active" {% endif %}>
             <a class="" href="results">
                           <i class="icon_piechart"></i>
@@ -98,10 +103,8 @@
     <!--custom script for all pages-->
     <script src="{{ url_for('static', filename='js/jq-scripts.js') }}"></script>
     <!--date picker-->
-  <script src="{{ url_for('static', filename='js/moment.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/daterangepicker.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/bootstrap-datepicker.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/form-component.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/moment.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.min.js') }}"></script>
 
   {% block scripts %}
   {% endblock %}
