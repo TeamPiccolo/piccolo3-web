@@ -1,4 +1,7 @@
 2019-07-30 Magnus Hagdorn
+ * piccolo3/app.py: fix module name
+
+2019-07-30 Magnus Hagdorn
  * piccolo3/app.py: populate scheduler template with piccolo control
    parameters
  * piccolo3/static/js/piccolo3-scheduler.js: handle controls to schedule a run

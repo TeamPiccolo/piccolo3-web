@@ -59,7 +59,7 @@ async def index():
     '''HTML for index page of the dashboard'''
     info = await pclient.sys.get_info()
     info['clock'] = await pclient.sys.get_clock()
-    info['dt'] = datetime.now()
+    info['dt'] = datetime.datetime.now()
     info['datadir'] = await pclient.data.get_datadir()
     info['host'] = await pclient.sys.get_host()
     info['server_version'] = await pclient.sys.get_server_version()
