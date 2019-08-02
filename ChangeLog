@@ -1,3 +1,9 @@
+2019-08-02 Magnus Hagdorn
+ * piccolo3/app.py: add route to get list of jobs
+ * piccolo3/static/js/piccolo3-scheduler.js: add function to display list of
+   scheduled jobs
+ * piccolo3/templates/scheduler.html: add panel to hold list of jobs
+
 2019-07-30 Magnus Hagdorn
  * piccolo3/app.py: fix module name
 

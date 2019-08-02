@@ -30,6 +30,30 @@ function date_time(tstr) {
     return date;
 }
 
+function display_jobs(jobs) {
+    var content = '';
+    jobs.forEach(function(job) {
+	start = new Date(job[2]).toLocaleString();
+	if (job[3] == null)
+	    end = '';
+	else
+	    end = new Date(job[3]).toLocaleString();
+	if (job[4] == null)
+	    interval = '';
+	else
+	    interval = job[4];
+	content += '<tr>';
+	content += '<td>' + job[0] + '</td>';
+	content += '<td>' + job[1][0] + '</td>';
+	content += '<td>' + start + '</td>';
+	content += '<td>' + end + '</td>';
+	content += '<td>' + interval + '</td>';
+	content += '<td>' + job[5] + '</td>';
+	content += '</tr>';
+    });
+    $('#scheduled-jobs-table tbody').html(content);
+}
+
 var ws_piccolo = new WebSocket('ws://' + document.domain + ':' + location.port + '/piccolo');
 ws_piccolo.onmessage = function (event) {
     var data = JSON.parse(event.data);
@@ -53,6 +77,9 @@ ws_piccolo.onmessage = function (event) {
     if ('quietEnd' in data) {
 	qtEnd = date_time(data.quietEnd);
 	$('#quietEnd').data("DateTimePicker").date(qtEnd);
+    }
+    if ('jobs' in data) {
+	display_jobs(data.jobs);
     }
 };
 
@@ -131,6 +158,16 @@ $(document).ready(function() {
     });
     $("#scheduleEnd").on("dp.change", function (e) {
         $('#scheduleStart').data("DateTimePicker").maxDate(e.date);
+    });
+
+    $.ajax({
+	url: "jobs",
+	cache: false,
+	dataType: "json",
+	success: function(data) {
+	    display_jobs(data);
+	},
+	error: function (request, status, error) { console.log(status + ", " + error); }
     });
     
 });

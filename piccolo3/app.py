@@ -298,6 +298,13 @@ async def results():
                                  currentRun = currentRun.name,
                                  spectraList = spectraList)
 
+@app.route('/jobs',methods=['GET'])
+async def jobs():
+    """get list of scheduled jobs"""
+
+    jobs = await pclient.scheduler.get_jobs()
+    return jsonify(jobs)
+
 @app.route('/data',methods=['GET'])
 async def get_runs():
     '''return list of runs'''
