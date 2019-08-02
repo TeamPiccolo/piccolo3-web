@@ -30,6 +30,19 @@ function date_time(tstr) {
     return date;
 }
 
+function suspend(job) {
+    var msg = JSON.stringify(['suspend_job',job]);
+    ws_piccolo.send(msg);
+}
+function unsuspend(job) {
+    var msg = JSON.stringify(['unsuspend_job',job]);
+    ws_piccolo.send(msg);
+}
+function remove(job) {
+    var msg = JSON.stringify(['delete_job',job]);
+    ws_piccolo.send(msg);
+}
+
 function display_jobs(jobs) {
     var content = '';
     jobs.forEach(function(job) {
@@ -48,7 +61,12 @@ function display_jobs(jobs) {
 	content += '<td>' + start + '</td>';
 	content += '<td>' + end + '</td>';
 	content += '<td>' + interval + '</td>';
-	content += '<td>' + job[5] + '</td>';
+	content += '<td>'
+	if (job[5] == 'suspended')
+	    content += ' <button type="button" id="pauseButton" class="btn btn-success" onclick="unsuspend('+job[0]+');">Unause</button> '
+	else
+	    content += ' <button type="button" id="pauseButton" class="btn btn-warning" onclick="suspend('+job[0]+');">Pause</button> '
+	content += ' <button type="button" id="stopButton" class="btn btn-danger"  onclick="remove('+job[0]+');">Delete</button> </td>';
 	content += '</tr>';
     });
     $('#scheduled-jobs-table tbody').html(content);

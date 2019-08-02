@@ -1,4 +1,9 @@
 2019-08-02 Magnus Hagdorn
+ * piccolo3/app.py: handle requests to suspend/unsupend/delete jobs
+ * piccolo3/static/js/piccolo3-scheduler.js: add buttons to
+   suspend/unsuspend/delete jobs
+
+2019-08-02 Magnus Hagdorn
  * piccolo3/app.py: add route to get list of jobs
  * piccolo3/static/js/piccolo3-scheduler.js: add function to display list of
    scheduled jobs

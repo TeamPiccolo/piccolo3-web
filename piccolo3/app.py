@@ -193,6 +193,24 @@ async def piccolo_ctrl():
             except Exception as e:
                 app.logger.error(str(e))
             continue
+        elif cmd == 'suspend_job':
+            try:
+                await pclient.scheduler.suspend(args)
+            except Exception as e:
+                app.logger.error(str(e))
+            continue
+        elif cmd == 'unsuspend_job':
+            try:
+                await pclient.scheduler.unsuspend(args)
+            except Exception as e:
+                app.logger.error(str(e))
+            continue
+        elif cmd == 'delete_job':
+            try:
+                await pclient.scheduler.delete(args)
+            except Exception as e:
+                app.logger.error(str(e))
+            continue
         else:
             app.logger.error('unkown command %s'%msg)
 
