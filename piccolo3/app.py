@@ -34,7 +34,7 @@ import argparse, os, json
 import datetime,pytz
 from piccolo3 import client as piccolo
 from piccolo3.common import PiccoloSpectraList
-from quart import Quart, render_template, jsonify,request, websocket, copy_current_websocket_context
+from quart import Quart, render_template, jsonify,request, websocket, copy_current_websocket_context, redirect
 from functools import wraps
 import asyncio
 
@@ -57,6 +57,10 @@ async def info():
 @app.route('/', methods=['GET'])
 async def index():
     '''HTML for index page of the dashboard'''
+    if not pclient.sys.isConnected:
+        await asyncio.sleep(1)
+        return redirect(request.url)
+    
     info = await pclient.sys.get_info()
     info['clock'] = await pclient.sys.get_clock()
     info['dt'] = datetime.datetime.now()
@@ -385,8 +389,6 @@ async def get_spectra(run,spectra):
             return jsonify(data)
         
     raise APIRequestException('unknown request %s'%data_type)
-    
-## Error Handling
 
 class APIRequestException(Exception):
     '''Exception class for API Exceptions

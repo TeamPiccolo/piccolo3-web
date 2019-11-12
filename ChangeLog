@@ -1,3 +1,6 @@
+2019-11-12 Magnus Hagdorn
+ * piccolo3/app.py: redirect to index page if piccolo server is not ready
+
 2019-08-02 Magnus Hagdorn
  * piccolo3/app.py: handle requests to suspend/unsupend/delete jobs
  * piccolo3/static/js/piccolo3-scheduler.js: add buttons to
