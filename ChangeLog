@@ -1,3 +1,6 @@
+2019-11-21 Magnus Hagdorn
+ * piccolo3/app.py: web app also logs when it cannot connect to server
+
 2019-11-12 Magnus Hagdorn
  * piccolo3/app.py: redirect to index page if piccolo server is not ready
 
