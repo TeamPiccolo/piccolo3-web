@@ -19,7 +19,7 @@
 
 //websocket used to exchange integration times
 var ws = new WebSocket('ws://' + document.domain + ':' + location.port + '/spectrometers');
-ws.onmessage = function (evenet) {
+ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
     var spec = data[0];
     var key = data[1].split('/');
