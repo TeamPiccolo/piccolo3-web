@@ -57,7 +57,8 @@ async def info():
 @app.route('/', methods=['GET'])
 async def index():
     '''HTML for index page of the dashboard'''
-    if not pclient.sys.isConnected:
+
+    if not await pclient.sys.isConnected():
         app.logger.warning('waiting for piccolo server')
         await asyncio.sleep(1)
         return redirect(request.url)
