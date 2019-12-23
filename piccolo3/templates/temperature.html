@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% block head %}
+
+{% endblock %}
+{% block content %}
+
+<!--main content start-->
+<section id="main-content">
+  <section class="wrapper">
+    <div class="row">
+      <div class="col-lg-12">
+        <h3 class="page-header"><i class="fa fa-laptop"></i> Record</h3>
+        <ol class="breadcrumb">
+          <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+          <li><i class="fa fa-laptop"></i>Temperature</li>
+        </ol>
+      </div>
+    </div>
+    
+    <!--overview start-->
+    {% include 'overview.html' %}
+
+    <!-- statics end -->
+
+
+
+    <!-- Tables start-->
+      <div class="row">
+      <div class="col-lg-7">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2><i class="fa fa-map-marker"></i><strong>Thermo-Electric Controller</strong></h2>
+            <div class="panel-actions">
+              <a class="btn-setting" onclick="getInfo(false, false, true)"><i class="fa fa-rotate-right"></i></a>
+            </div>
+          </div>
+        <div class="panel-body">
+
+          <table class="table" id="temperature-table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+		<th scope="col">target</th>
+		<th scope="col">current</th>
+		<th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody >
+              {% for s in spectrometers %}
+
+	      <tr>
+                <th scope="row">
+                  <i id='{{s}}-status-icon' style="color: green;" class="fa fa-leaf"></i>
+                  {{s}}
+		</th>
+		<td>
+		  <input id="{{s}}-target" class="quantity" min="-20"  max="0" name="quantity" step="0.1" type="number">
+		<td><span id="{{s}}-current"></span></td>
+		<td>
+		  <input class="form-check-input" type="checkbox" id="{{s}}-enabled">
+	      </tr>
+	      {% endfor %}
+            </tbody>
+          </table>
+          <p id='record-msg'></p>
+            </div>
+
+            <div class="panel-footer">
+                <h2><i class="fa fa-info"  id='record-table-statusicon'></i><span  id='record-table-statusinfo'></span></h2>
+              </div>
+
+        </div>
+      </div>
+      
+    </div>
+
+  </section>
+</section>
+<!--main content end-->
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script type="text/javascript">
+
+/* Read to configuration jinja parameters */
+var piccoloTime = '{{ clock }}';
+var status = "{{ status }}"
+var state = "{{ state }}"
+
+</script>
+
+<script src="{{ url_for('static', filename='js/piccolo3-overview.js') }}"></script>
+<script src="{{ url_for('static', filename='js/piccolo3-temperature.js') }}"></script>
+
+{% endblock %}

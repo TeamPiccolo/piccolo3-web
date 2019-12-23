@@ -322,6 +322,84 @@ async def results():
                                  currentRun = currentRun.name,
                                  spectraList = spectraList)
 
+
+temperature_ws = PiccoloWebsocket(pclient.spec.register_callback)
+@app.websocket('/tempctrl')
+@temperature_ws
+async def tempctrl():
+    for spec in pclient.spec.keys():
+        k = 'status'
+        v = await pclient.spec[spec].a_get(k)
+        await websocket.send(json.dumps((spec,k,v)))
+        if pclient.spec[spec].haveTEC:
+            await websocket.send(json.dumps((spec,'present',True)))
+            ct = await pclient.spec[spec].current_temperature()
+            await websocket.send(json.dumps((spec,'current',ct)))
+            t = await pclient.spec[spec].get_target_temperature()
+            await websocket.send(json.dumps((spec,'target',t)))
+            e = await pclient.spec[spec].get_TECenabled()
+            await websocket.send(json.dumps((spec,'enabled',e)))
+        else:
+            await websocket.send(json.dumps((spec,'present',False)))
+
+    while True:
+        msg = await websocket.receive()
+        try:
+            d = json.loads(msg)
+            spec = d[0]
+            key = d[1]
+            value = d[2]
+        except:
+            error = 'could not parse message %s'%msg
+            app.logger.error(error)
+            continue
+        if spec not in pclient.spec:
+            error = 'no such spectrometer %s'%spec
+            app.logger.error(error)
+            continue
+        if key == 'target':
+            try:
+                await pclient.spec[spec].set_target_temperature(value)
+            except Exception as e:
+                # log error and restore current value
+                error = str(e)
+                app.logger.error(error)
+                t = await pclient.spec[spec].get_target_temperature()
+                await websocket.send(json.dumps((spec,'target',t)))
+                continue
+        elif key == 'enabled':
+            try:
+                await pclient.spec[spec].set_TECenabled(value)
+            except Exception as e:
+                # log error and restore current value
+                error = str(e)
+                app.logger.error(error)
+                e = await pclient.spec[spec].get_TECenabled()
+                await websocket.send(json.dumps((spec,'enabled',e)))
+        else:
+            app.logger.error('unknown key: {}'.format(key))
+
+@app.route('/ctemp',methods=['GET'])
+async def ctemp():
+    '''get the current temperature'''
+    temp = {}
+    for spec in pclient.spec.keys():
+        temp[spec] = await pclient.spec[spec].current_temperature()
+    return jsonify(temp)
+        
+@app.route('/temperature',methods=['GET'])
+async def temperature():
+    '''Renders HTML for temperature page'''
+    clock = await pclient.sys.get_clock()
+    dt = datetime.datetime.now()
+    spectrometers = await pclient.spec.get_spectrometers()
+    
+    return await render_template('temperature.html',
+                                 clock = clock,
+                                 dt = dt,
+                                 spectrometers = spectrometers
+    )
+
 @app.route('/jobs',methods=['GET'])
 async def jobs():
     """get list of scheduled jobs"""

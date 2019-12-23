@@ -1,3 +1,10 @@
+2019-12-23 Magnus Hagdorn
+ * piccolo3/app.py: handle setting temperatures
+ * piccolo3/templates/layout.html: add temperature page
+ * piccolo3/static/js/piccolo3-temperature.js: new javascript for handling
+   temperature settings
+ * piccolo3/templates/temperature.html: new template for temperature settings
+
 2019-12-09 Magnus Hagdorn
  * piccolo3/app.py: use new coroutine to check if client is connected
 
