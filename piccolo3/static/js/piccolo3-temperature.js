@@ -61,9 +61,9 @@ wt.onmessage = function (event) {
     else {
         var idx = spec + '-' + key[0];
         var cell = document.getElementById(idx);
-	if (key[0] == 'target')
+	if (key[0] == 'target_temperature')
 	    cell.value = value;
-	else if (key[0] == 'enabled')
+	else if (key[0] == 'TECenabled')
 	    cell.checked = value;
 	else if (key[0] == 'current')
             cell.innerHTML = value;
@@ -146,7 +146,7 @@ $(document).ready(function() {
 	item.addEventListener("change",
         function(event) {
 	    var [spec,key] = this.id.split('-');
-	    if (key == 'enabled')
+	    if (key == 'TECenabled')
 		val = this.checked;
 	    else
 		val = this.value;

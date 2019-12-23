@@ -336,9 +336,9 @@ async def tempctrl():
             ct = await pclient.spec[spec].current_temperature()
             await websocket.send(json.dumps((spec,'current',ct)))
             t = await pclient.spec[spec].get_target_temperature()
-            await websocket.send(json.dumps((spec,'target',t)))
+            await websocket.send(json.dumps((spec,'target_temperature',t)))
             e = await pclient.spec[spec].get_TECenabled()
-            await websocket.send(json.dumps((spec,'enabled',e)))
+            await websocket.send(json.dumps((spec,'TECenabled',e)))
         else:
             await websocket.send(json.dumps((spec,'present',False)))
 
@@ -353,11 +353,12 @@ async def tempctrl():
             error = 'could not parse message %s'%msg
             app.logger.error(error)
             continue
+        app.logger.info('received tempctrl_ws: %s'%msg)
         if spec not in pclient.spec:
             error = 'no such spectrometer %s'%spec
             app.logger.error(error)
             continue
-        if key == 'target':
+        if key == 'target_temperature':
             try:
                 await pclient.spec[spec].set_target_temperature(value)
             except Exception as e:
@@ -365,9 +366,9 @@ async def tempctrl():
                 error = str(e)
                 app.logger.error(error)
                 t = await pclient.spec[spec].get_target_temperature()
-                await websocket.send(json.dumps((spec,'target',t)))
+                await websocket.send(json.dumps((spec,'target_temperature',t)))
                 continue
-        elif key == 'enabled':
+        elif key == 'TECenabled':
             try:
                 await pclient.spec[spec].set_TECenabled(value)
             except Exception as e:
@@ -375,7 +376,8 @@ async def tempctrl():
                 error = str(e)
                 app.logger.error(error)
                 e = await pclient.spec[spec].get_TECenabled()
-                await websocket.send(json.dumps((spec,'enabled',e)))
+                await websocket.send(json.dumps((spec,'TECenabled',e)))
+                continue
         else:
             app.logger.error('unknown key: {}'.format(key))
 
