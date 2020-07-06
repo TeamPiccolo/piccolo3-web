@@ -386,7 +386,10 @@ async def ctemp():
     '''get the current temperature'''
     temp = {}
     for spec in pclient.spec.keys():
-        temp[spec] = await pclient.spec[spec].current_temperature()
+        try:
+            temp[spec] = await pclient.spec[spec].current_temperature()
+        except:
+            temp[spec] = None
     return jsonify(temp)
         
 @app.route('/temperature',methods=['GET'])
