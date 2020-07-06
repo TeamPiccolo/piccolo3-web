@@ -1,3 +1,7 @@
+2020-07-06 Magnus Hagdorn
+ * piccolo3/app.py: handle case when TEC is present
+ * piccolo3/templates/overview.html: update team name
+
 2019-12-23 Magnus Hagdorn
  * piccolo3/app.py: consistently name temperature related parameters
  * piccolo3/static/js/piccolo3-temperature.js: ditto
