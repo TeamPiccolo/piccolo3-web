@@ -42,12 +42,14 @@ ws.onmessage = function (event) {
     }
     else if (key[0] == 'status') {
 	var idx = '#'+spec + '-status-icon';
-	if (value=='idle')
-	    var colour = 'green';
-	else if (value=='disconnected')
+	console.log(spec,value);
+	if (value < 4)
 	    var colour = 'red';
-	else
+	else if (value > 4)
 	    var colour = 'orange';
+	else
+	    var colour = 'green';
+	console.log($(idx));
 	$(idx).css('color', colour);
     }
     else {
