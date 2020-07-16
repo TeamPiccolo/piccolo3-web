@@ -49,7 +49,9 @@ wt.onmessage = function (event) {
 	var idx = '#'+spec.replace('+','\\+') + '-status-icon';
 	if (value < 4)
 	    var colour = 'red';
-	else if (value > 4)
+	else if (value == 4)
+	    var colour = 'black';
+	else if (value > 5)
 	    var colour = 'orange';
 	else
 	    var colour = 'green';
