@@ -41,15 +41,13 @@ ws.onmessage = function (event) {
 	cell.style.color = colour;
     }
     else if (key[0] == 'status') {
-	var idx = '#'+spec + '-status-icon';
-	console.log(spec,value);
+	var idx = '#'+spec.replace('+','\\+') + '-status-icon';
 	if (value < 4)
 	    var colour = 'red';
 	else if (value > 4)
 	    var colour = 'orange';
 	else
 	    var colour = 'green';
-	console.log($(idx));
 	$(idx).css('color', colour);
     }
     else {
