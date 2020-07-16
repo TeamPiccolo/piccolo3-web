@@ -331,7 +331,11 @@ async def tempctrl():
         k = 'status'
         v = await pclient.spec[spec].a_get(k)
         await websocket.send(json.dumps((spec,k,v)))
-        if pclient.spec[spec].haveTEC:
+        try:
+            haveTEC = pclient.spec[spec].haveTEC
+        except Warning:
+            haveTEC = False
+        if haveTEC:
             await websocket.send(json.dumps((spec,'present',True)))
             ct = await pclient.spec[spec].current_temperature()
             await websocket.send(json.dumps((spec,'current',ct)))
