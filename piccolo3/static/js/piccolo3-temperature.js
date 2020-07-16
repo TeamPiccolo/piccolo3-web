@@ -46,13 +46,13 @@ wt.onmessage = function (event) {
     var value = data[2];
     
     if (key[0] == 'status') {
-	var idx = '#'+spec + '-status-icon';
-	if (value=='idle')
-	    var colour = 'green';
-	else if (value=='disconnected')
+	var idx = '#'+spec.replace('+','\\+') + '-status-icon';
+	if (value < 4)
 	    var colour = 'red';
-	else
+	else if (value > 4)
 	    var colour = 'orange';
+	else
+	    var colour = 'green';
 	$(idx).css('color', colour);
     }
     else if (key[0] == 'present') {
