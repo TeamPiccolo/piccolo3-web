@@ -58,7 +58,7 @@ ws.onmessage = function (event) {
 	else
 	    var idx = spec + '-' + key[0];
 	var cell = document.getElementById(idx);
-	cell.innerHTML = value;
+	cell.value = value;
     }
 };
 
@@ -102,6 +102,12 @@ ws_piccolo.onmessage = function (event) {
 // initial calls for integration record table
 updateTableFooter(status, state);
 
+function recordTableChanged(id,val) {
+    var spec = id.split('-');
+    var data = JSON.stringify([spec[0],spec[1],val]);
+    ws.send(data);
+}
+
 /* changes record to editable / not editable.
 
 Param:
@@ -109,18 +115,11 @@ Param:
 */
 function updateEditable(editable){
   edtable = document.getElementById('record-table');
-  edbody = edtable.getElementsByTagName('tbody')[0]; //body of table
-  if(editable){
-    edbody.className = 'table-editable'
-  } else {
-    edbody.className = 'table-editable-disabled'
-  }
-  for (var i=0, row; row=edbody.rows[i]; i++){ //iterate through rows
-    for(var j=1, col; col=row.cells[j]; j++){
-      col.getElementsByTagName('span')[0].contentEditable=editable;
+    edbody = edtable.getElementsByTagName('tbody')[0]; //body of table
+   var cells = edbody.getElementsByTagName('input');
+    for (let cell of cells) {
+	cell.disabled= !editable;
     }
-  }
-
 }
 
 /*updates the status table of the record-table footer
@@ -214,15 +213,6 @@ $(document).ready(function() {
   Calls submitIngegration if the enter key is pressed
   */
     displayTime();
-    $('.table-editable span').keydown(function(e) {
-     if(e.which == 13) { //enter key is 13
-        $(this).blur().next().focus();
-         val= $(this).text();
-	 id = $(this).attr('id').split('-'); //get spectrometer and key from id
-	 var data = JSON.stringify([id[0],id[1],val]);
-	 ws.send(data);
-      }
-    });
  })
 
 /* END Record Table --------------------------------------------------------- */

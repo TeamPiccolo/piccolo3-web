@@ -53,11 +53,11 @@
 		<td>
 		  <i id='{{s}}-status-icon' style="color: green;" class="fa fa-leaf"></i>
 		  {{s}}</td>
-		<td><span id="{{s}}-min_time"></span></td>
+		<td class="col-sm-2"><input id="{{s}}-min_time" class="col-sm-12" min="0" type="number" onchange="recordTableChanged(this.id,this.value)" /></td>
 		{% for c in channels %}
-		<td><span id="{{s}}-current_time/{{c}}"></span></td>
+		<td class="col-sm-2"><input id="{{s}}-current_time/{{c}}" class="col-sm-12" min="0" type="number" onchange="recordTableChanged(this.id,this.value)" /></td>
                 {% endfor %}
-		<td><span id="{{s}}-max_time"></span></td>
+		<td class="col-sm-2"><input id="{{s}}-max_time" class="col-sm-12" min="0" type="number" onchange="recordTableChanged(this.id,this.value)" /></td>
 	      </tr>
 	      {% endfor %}
             </tbody>
