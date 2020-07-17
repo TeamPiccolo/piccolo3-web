@@ -96,7 +96,7 @@ function getSpectrum(ele, tryNumber){
     var spectra;
   if(ele.tagName==='TH'){
     spectra = ele.innerHTML;
-    url="data/"+run+"/"+spectra+"?data=plot_all";
+    url="data/"+run+"/"+spectra+"?data=plot_first";
   }else if (ele.tagName==='SELECT'){
     spectra=$(ele).find(':selected').data('spectra');
     direction = $(ele).find(':selected').data('direction');

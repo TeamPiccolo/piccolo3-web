@@ -460,6 +460,8 @@ async def get_spectra(run,spectra):
             d = data_type[5:]
             if d == 'all':
                 directions = spectra.directions
+            if d == 'first':
+                directions = [spectra.directions[0]]
             else:
                 directions = [d]
             data = []
@@ -476,6 +478,8 @@ async def get_spectra(run,spectra):
                         sDict['Directions'] = spectra.directions
                         data.append(sDict)
             return jsonify(data)
+        elif data_type == 'directions':
+            return jsonify(spectra.directions)
         
     raise APIRequestException('unknown request %s'%data_type)
 
