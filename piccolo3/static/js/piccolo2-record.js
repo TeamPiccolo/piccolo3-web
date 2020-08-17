@@ -41,12 +41,13 @@ ws.onmessage = function (event) {
 	cell.style.color = colour;
     }
     else if (key[0] == 'status') {
+	// FIXME: these values are defined in the PiccoloSpectrometerStatus class
 	var idx = '#'+spec.replace('+','\\+') + '-status-icon';
-	if (value < 4)
+	if (value < 5)
 	    var colour = 'red';
-	else if (value == 4)
+	else if (value == 5)
 	    var colour = 'black';
-	else if (value > 5)
+	else if (value > 6)
 	    var colour = 'orange';
 	else
 	    var colour = 'green';
