@@ -33,7 +33,7 @@ App Endpoints:
 import argparse, os, json
 import datetime,pytz
 from piccolo3 import client as piccolo
-from piccolo3.common import PiccoloSpectraList
+from piccolo3.common import PiccoloSpectraList, PiccoloSpectrometerStatus
 from quart import Quart, render_template, jsonify,request, websocket, copy_current_websocket_context, redirect
 from functools import wraps
 import asyncio
@@ -273,7 +273,8 @@ async def record():
     auto = await pclient.control.get_autointegration()
     delay = await pclient.control.get_delay()
     target = await pclient.control.get_target()
-    return await render_template('record.html', 
+    return await render_template('record.html',
+                                 PiccoloSpectrometerStatus = PiccoloSpectrometerStatus,
                                  clock = clock,
                                  dt = dt,
                                  channels=channels,
@@ -404,6 +405,7 @@ async def temperature():
     spectrometers = await pclient.spec.get_spectrometers()
     
     return await render_template('temperature.html',
+                                 PiccoloSpectrometerStatus = PiccoloSpectrometerStatus,
                                  clock = clock,
                                  dt = dt,
                                  spectrometers = spectrometers

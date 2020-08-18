@@ -1,0 +1,16 @@
+<script type="text/javascript">
+
+/* Read to configuration jinja parameters */
+var piccoloTime = '{{ clock }}';
+  var status = "{{ status }}";
+  var state = "{{ state }}";
+
+  var specStatus = {};
+  var specStatusValue = {};
+
+  {% for name,value  in PiccoloSpectrometerStatus.__members__.items()  %}
+  specStatus[{{value.value}}] = "{{name}}";
+  specStatusValue["{{name}}"] = {{value.value}};
+  {% endfor %}
+  
+</script>

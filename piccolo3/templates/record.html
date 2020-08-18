@@ -51,7 +51,7 @@
               {% for s in spectrometers %}
 	      <tr>
 		<td>
-		  <i id='{{s}}-status-icon' style="color: green;" class="fa fa-leaf"></i>
+		  <i id='{{s}}-status-icon' style="color: red;" class="fa fa-leaf" title="DISCONNECTED"></i>
 		  {{s}}</td>
 		<td class="col-sm-2"><input id="{{s}}-min_time" class="col-sm-12" min="0" type="number" onchange="recordTableChanged(this.id,this.value)" /></td>
 		{% for c in channels %}
@@ -113,14 +113,7 @@
 
 {% block scripts %}
 
-<script type="text/javascript">
-
-/* Read to configuration jinja parameters */
-var piccoloTime = '{{ clock }}';
-var status = "{{ status }}"
-var state = "{{ state }}"
-
-</script>
+{% include 'status.html' %}
 
 <script src="{{ url_for('static', filename='js/piccolo3-overview.js') }}"></script>
 <script src="{{ url_for('static', filename='js/piccolo2-record.js') }}"></script>

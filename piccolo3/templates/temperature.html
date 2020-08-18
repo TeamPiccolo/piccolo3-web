@@ -84,14 +84,7 @@
 
 {% block scripts %}
 
-<script type="text/javascript">
-
-/* Read to configuration jinja parameters */
-var piccoloTime = '{{ clock }}';
-var status = "{{ status }}"
-var state = "{{ state }}"
-
-</script>
+{% include 'status.html' %}
 
 <script src="{{ url_for('static', filename='js/piccolo3-overview.js') }}"></script>
 <script src="{{ url_for('static', filename='js/piccolo3-temperature.js') }}"></script>
