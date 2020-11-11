@@ -199,6 +199,18 @@ async def piccolo_ctrl():
             except Exception as e:
                 app.logger.error(str(e))
             continue
+        elif cmd == 'powerOffEnabled':
+            try:
+                await pclient.scheduler.set_powerOffEnabled(args)
+            except Exception as e:
+                app.logger.error(str(e))
+            continue
+        elif cmd == 'powerDelay':
+            try:
+                await pclient.scheduler.set_powerDelay(args)
+            except Exception as e:
+                app.logger.error(str(e))
+            continue
         elif cmd == 'suspend_job':
             try:
                 await pclient.scheduler.suspend(args)
@@ -298,6 +310,8 @@ async def scheduler():
     qtEnabled = await pclient.scheduler.get_quietTimeEnabled()
     qtStart = await pclient.scheduler.get_quietStart()
     qtEnd = await pclient.scheduler.get_quietEnd()
+    poEnabled = await pclient.scheduler.get_powerOffEnabled()
+    power_delay = await pclient.scheduler.get_powerDelay()
     
     return await render_template('scheduler.html', 
                                  clock = clock,
@@ -309,7 +323,9 @@ async def scheduler():
                                  target = target,
                                  qtEnabled = qtEnabled,
                                  qtStart = qtStart,
-                                 qtEnd = qtEnd )
+                                 qtEnd = qtEnd,
+                                 poEnabled = poEnabled,
+                                 power_delay = power_delay)
 
 @app.route('/results',methods=['GET'])
 async def results():

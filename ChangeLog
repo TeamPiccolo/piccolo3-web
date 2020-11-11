@@ -1,3 +1,9 @@
+2020-11-11 Magnus Hagdorn
+ * piccolo3/app.py: handle power off control during quiet time
+ * piccolo3/static/js/piccolo3-scheduler.js: ditto
+ * piccolo3/templates/scheduler.html: add UI elements for power off during
+   quiet time
+
 2020-07-06 Magnus Hagdorn
  * piccolo3/app.py: handle case when TEC is present
  * piccolo3/templates/overview.html: update team name

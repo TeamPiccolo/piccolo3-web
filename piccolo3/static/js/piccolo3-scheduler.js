@@ -87,6 +87,13 @@ ws_piccolo.onmessage = function (event) {
     }
     if ('quietTimeEnabled' in data) {
 	document.getElementById('enableQ').checked = data.quietTimeEnabled;
+	document.getElementById('enableP').disabled = !data.quietTimeEnabled;
+    }
+    if ('powerOffEnabled' in data) {
+	document.getElementById('enableP').checked = data.powerOffEnabled;
+    }
+    if ('power_delay' in data) {
+	document.getElementById('delayP').value = data.power_delay;
     }
     if ('quietStart' in data) {
 	qtStart = date_time(data.quietStart);
@@ -151,12 +158,26 @@ $('#scheduleButton').on('click', function() {
 $(document).ready(function() {
 
     document.getElementById('enableQ').checked = qtEnabled;
+    document.getElementById('enableP').checked = poEnabled;
+    document.getElementById('enableP').disabled = !qtEnabled;
     
     $('#enableQ').on('change', function() {
 	var msg = JSON.stringify(['quietTimeEnabled',this.checked]);
+	$('#enableP').disabled = !this.checked;
 	ws_piccolo.send(msg);
     });
 
+    $('#enableP').on('change', function() {
+	var msg = JSON.stringify(['powerOffEnabled',this.checked]);
+	ws_piccolo.send(msg);
+    });
+
+    $('#delayP').on('change', function() {
+	var msg = JSON.stringify(['powerDelay',this.value]);
+	ws_piccolo.send(msg);
+    });
+
+    
     $('#quietStart').datetimepicker(
 	{ format: 'HH:MM' }).on('dp.change', function (e) {
 	    var msg = JSON.stringify(['quietTimeStart',

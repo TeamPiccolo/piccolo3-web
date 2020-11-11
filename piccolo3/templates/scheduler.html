@@ -61,7 +61,20 @@
 		</div>
               </div>
 
+	      <div class="form-group">
+		<label class="control-label col-sm-4">enable power off</label>
+		<div class="col-sm-6">
+		  <input id="enableP" type="checkbox" value="" />
+		</div>
+	      </div>
 	    </form>
+
+	    <div class="form-group">
+	      <label class="control-label col-sm-4">power off delay (sec)</label>
+	      <div class="col-sm-6">
+		<input id="delayP" class="quantity" min="0" name="quantity" value="{{ power_delay }}" type="number" step = "1">
+	      </div>
+	    </div>
 	    
 	  </div>
 	</div>
@@ -169,6 +182,8 @@
   var piccoloTime = '{{ clock }}';
   var status = "{{ status }}";
   var state = "{{ state }}";
+  var poEnabled = "{{ poEnabled }}" == "True" ;
+  var power_delay = "{{ power_delay }}" ;
   var qtEnabled = "{{ qtEnabled }}" == "True" ;
   var qtStart = new Date();
   qtStart.setUTCHours({{ qtStart.hour }}, {{ qtStart.minute }}, {{ qtStart.second }});
