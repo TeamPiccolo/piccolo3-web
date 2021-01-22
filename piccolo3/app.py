@@ -23,18 +23,18 @@ Web GUI
 App Endpoints:
     index - renders the home page
     results - renders the result page
-    
+
     info - returns status infos
-
-
-
 '''
 
-import argparse, os, json
-import datetime,pytz
+import os
+import json
+import datetime
+import pytz
 from piccolo3 import client as piccolo
 from piccolo3.common import PiccoloSpectraList, PiccoloSpectrometerStatus
-from quart import Quart, render_template, jsonify,request, websocket, copy_current_websocket_context, redirect
+from quart import Quart, render_template, \
+    jsonify, request, websocket, redirect
 from functools import wraps
 import asyncio
 
@@ -42,17 +42,18 @@ app = Quart(__name__)
 
 try:
     baseurl = os.environ['PICCOLO']
-except:
+except KeyError:
     baseurl = 'coap://localhost'
-
 
 pclient = piccolo.PiccoloSystem(baseurl)
 
-@app.route('/info',methods=['GET'])
+
+@app.route('/info', methods=['GET'])
 async def info():
     '''get json info'''
     info = await pclient.sys.get_info()
     return jsonify(info)
+
 
 @app.route('/', methods=['GET'])
 async def index():
@@ -62,7 +63,7 @@ async def index():
         app.logger.warning('waiting for piccolo server')
         await asyncio.sleep(1)
         return redirect(request.url)
-    
+
     info = await pclient.sys.get_info()
     info['clock'] = await pclient.sys.get_clock()
     info['dt'] = datetime.datetime.now()
@@ -70,27 +71,29 @@ async def index():
     info['host'] = await pclient.sys.get_host()
     info['server_version'] = await pclient.sys.get_server_version()
     info['client_version'] = piccolo.__version__
-    return await render_template('index.html',**info)
+    return await render_template('index.html', **info)
+
 
 class PiccoloWebsocket:
-    def __init__(self,cb):
+    def __init__(self, cb):
         self._connected_ws = set()
         # register callback
         cb(self.update)
 
-    def __call__(self,func):
+    def __call__(self, func):
         @wraps(func)
-        async def wrapper(*args,**kwargs):
+        async def wrapper(*args, **kwargs):
             self._connected_ws.add(websocket._get_current_object())
             try:
-                return await func(*args,**kwargs)
+                return await func(*args, **kwargs)
             finally:
                 self._connected_ws.remove(websocket._get_current_object())
         return wrapper
-        
-    async def update(self,message):
+
+    async def update(self, message):
         for ws in self._connected_ws:
             await ws.send(message)
+
 
 piccolo_ws = PiccoloWebsocket(pclient.control.register_callback)
 pdata_ws = PiccoloWebsocket(pclient.data.register_callback)
@@ -99,18 +102,18 @@ pscheduler_ws = PiccoloWebsocket(pclient.scheduler.register_callback)
 @piccolo_ws
 @pdata_ws
 @pscheduler_ws
-async def piccolo_ctrl():
+async def piccolo_ctrl():  # noqa: C901
     s = await pclient.control.get_status()
-    await websocket.send(json.dumps({'status':s}))
+    await websocket.send(json.dumps({'status': s}))
     while True:
         msg = await websocket.receive()
         try:
-            cmd,args = json.loads(msg)
-        except:
-            error = 'could not parse message %s'%msg
+            cmd, args = json.loads(msg)
+        except json.JSONDecodeError:
+            error = f'could not parse message {msg}'
             app.logger.error(error)
             continue
-        app.logger.info('received piccolo_ws {}({})'.format(cmd,args))
+        app.logger.info(f'received piccolo_ws {cmd}({args})')
         if cmd == 'current_run':
             try:
                 await pclient.data.set_current_run(args)
@@ -177,7 +180,7 @@ async def piccolo_ctrl():
             except Exception as e:
                 app.logger.error(str(e))
             ptime = await pclient.sys.get_clock()
-            await websocket.send(json.dumps({'timeChanged':ptime}))
+            await websocket.send(json.dumps({'timeChanged': ptime}))
             continue
         elif cmd == 'quietTimeEnabled':
             try:
@@ -230,23 +233,23 @@ async def piccolo_ctrl():
                 app.logger.error(str(e))
             continue
         else:
-            app.logger.error('unkown command %s'%msg)
+            app.logger.error(f'unkown command {msg}')
 
-        
+
 spectrometer_ws = PiccoloWebsocket(pclient.spec.register_callback)
 @app.websocket('/spectrometers')
 @spectrometer_ws
-async def spectrometers():
+async def spectrometers():  # noqa: C901
     channels = await pclient.spec.get_channels()
     for spec in pclient.spec.keys():
-        for k in ['min_time','max_time','status']:
+        for k in ['min_time', 'max_time', 'status']:
             v = await pclient.spec[spec].a_get(k)
-            await websocket.send(json.dumps((spec,k,v)))
+            await websocket.send(json.dumps((spec, k, v)))
         for c in channels:
-            for m in ['current_time','autointegration']:
-                k = m+'/'+c
+            for m in ['current_time', 'autointegration']:
+                k = f"{m}/{c}"
                 v = await pclient.spec[spec].a_get(k)
-                await websocket.send(json.dumps((spec,k,v)))
+                await websocket.send(json.dumps((spec, k, v)))
     while True:
         msg = await websocket.receive()
         try:
@@ -254,25 +257,26 @@ async def spectrometers():
             spec = d[0]
             key = d[1]
             value = d[2]
-        except:
-            error = 'could not parse message %s'%msg
+        except Exception:
+            error = f'could not parse message {msg}'
             app.logger.error(error)
             continue
-        app.logger.info('received spectrometer_ws: %s'%msg)
+        app.logger.info(f'received spectrometer_ws: {msg}')
         if spec not in pclient.spec:
-            error = 'no such spectrometer %s'%spec
+            error = f'no such spectrometer {spec}'
             app.logger.error(error)
             continue
         try:
-            await pclient.spec[spec].a_put(key,value)
+            await pclient.spec[spec].a_put(key, value)
         except Exception as e:
             # log error and restore current value
             error = str(e)
             app.logger.error(error)
             v = await pclient.spec[spec].a_get(key)
-            await websocket.send(json.dumps((spec,key,v)))
+            await websocket.send(json.dumps((spec, key, v)))
             continue
-        
+
+
 @app.route('/record', methods=['GET'])
 async def record():
     '''Renders HTML for record page'''
@@ -285,17 +289,19 @@ async def record():
     auto = await pclient.control.get_autointegration()
     delay = await pclient.control.get_delay()
     target = await pclient.control.get_target()
-    return await render_template('record.html',
-                                 PiccoloSpectrometerStatus = PiccoloSpectrometerStatus,
-                                 clock = clock,
-                                 dt = dt,
-                                 channels=channels,
-                                 spectrometers = spectrometers,
-                                 current_run = current_run,
-                                 numSequences = numSequences,
-                                 auto = auto,
-                                 delay = delay,
-                                 target = target )
+    return await render_template(
+        'record.html',
+        PiccoloSpectrometerStatus=PiccoloSpectrometerStatus,
+        clock=clock,
+        dt=dt,
+        channels=channels,
+        spectrometers=spectrometers,
+        current_run=current_run,
+        numSequences=numSequences,
+        auto=auto,
+        delay=delay,
+        target=target)
+
 
 @app.route('/scheduler', methods=['GET'])
 async def scheduler():
@@ -312,22 +318,24 @@ async def scheduler():
     qtEnd = await pclient.scheduler.get_quietEnd()
     poEnabled = await pclient.scheduler.get_powerOffEnabled()
     power_delay = await pclient.scheduler.get_powerDelay()
-    
-    return await render_template('scheduler.html', 
-                                 clock = clock,
-                                 dt = dt,
-                                 current_run = current_run,
-                                 numSequences = numSequences,
-                                 auto = auto,
-                                 delay = delay,
-                                 target = target,
-                                 qtEnabled = qtEnabled,
-                                 qtStart = qtStart,
-                                 qtEnd = qtEnd,
-                                 poEnabled = poEnabled,
-                                 power_delay = power_delay)
 
-@app.route('/results',methods=['GET'])
+    return await render_template(
+        'scheduler.html',
+        clock=clock,
+        dt=dt,
+        current_run=current_run,
+        numSequences=numSequences,
+        auto=auto,
+        delay=delay,
+        target=target,
+        qtEnabled=qtEnabled,
+        qtStart=qtStart,
+        qtEnd=qtEnd,
+        poEnabled=poEnabled,
+        power_delay=power_delay)
+
+
+@app.route('/results', methods=['GET'])
 async def results():
     '''Renders HTML for results page'''
 
@@ -335,33 +343,34 @@ async def results():
     currentRun = await pclient.data.get_current_run()
     spectraList = await currentRun.get_spectra_list()
 
-    return await render_template('results.html',runList=runList,
-                                 currentRun = currentRun.name,
-                                 spectraList = spectraList)
+    return await render_template(
+        'results.html', runList=runList,
+        currentRun=currentRun.name,
+        spectraList=spectraList)
 
 
 temperature_ws = PiccoloWebsocket(pclient.spec.register_callback)
 @app.websocket('/tempctrl')
 @temperature_ws
-async def tempctrl():
+async def tempctrl():  # noqa: C901
     for spec in pclient.spec.keys():
         k = 'status'
         v = await pclient.spec[spec].a_get(k)
-        await websocket.send(json.dumps((spec,k,v)))
+        await websocket.send(json.dumps((spec, k, v)))
         try:
             haveTEC = pclient.spec[spec].haveTEC
         except Warning:
             haveTEC = False
         if haveTEC:
-            await websocket.send(json.dumps((spec,'present',True)))
+            await websocket.send(json.dumps((spec, 'present', True)))
             ct = await pclient.spec[spec].current_temperature()
-            await websocket.send(json.dumps((spec,'current',ct)))
+            await websocket.send(json.dumps((spec, 'current', ct)))
             t = await pclient.spec[spec].get_target_temperature()
-            await websocket.send(json.dumps((spec,'target_temperature',t)))
+            await websocket.send(json.dumps((spec, 'target_temperature', t)))
             e = await pclient.spec[spec].get_TECenabled()
-            await websocket.send(json.dumps((spec,'TECenabled',e)))
+            await websocket.send(json.dumps((spec, 'TECenabled', e)))
         else:
-            await websocket.send(json.dumps((spec,'present',False)))
+            await websocket.send(json.dumps((spec, 'present', False)))
 
     while True:
         msg = await websocket.receive()
@@ -370,13 +379,13 @@ async def tempctrl():
             spec = d[0]
             key = d[1]
             value = d[2]
-        except:
-            error = 'could not parse message %s'%msg
+        except Exception:
+            error = f'could not parse message {msg}'
             app.logger.error(error)
             continue
-        app.logger.info('received tempctrl_ws: %s'%msg)
+        app.logger.info(f'received tempctrl_ws: {msg}')
         if spec not in pclient.spec:
-            error = 'no such spectrometer %s'%spec
+            error = f'no such spectrometer {spec}'
             app.logger.error(error)
             continue
         if key == 'target_temperature':
@@ -387,7 +396,8 @@ async def tempctrl():
                 error = str(e)
                 app.logger.error(error)
                 t = await pclient.spec[spec].get_target_temperature()
-                await websocket.send(json.dumps((spec,'target_temperature',t)))
+                await websocket.send(
+                    json.dumps((spec, 'target_temperature', t)))
                 continue
         elif key == 'TECenabled':
             try:
@@ -397,48 +407,52 @@ async def tempctrl():
                 error = str(e)
                 app.logger.error(error)
                 e = await pclient.spec[spec].get_TECenabled()
-                await websocket.send(json.dumps((spec,'TECenabled',e)))
+                await websocket.send(json.dumps((spec, 'TECenabled', e)))
                 continue
         else:
             app.logger.error('unknown key: {}'.format(key))
 
-@app.route('/ctemp',methods=['GET'])
+
+@app.route('/ctemp', methods=['GET'])
 async def ctemp():
     '''get the current temperature'''
     temp = {}
     for spec in pclient.spec.keys():
         try:
             temp[spec] = await pclient.spec[spec].current_temperature()
-        except:
+        except Exception:
             temp[spec] = None
     return jsonify(temp)
-        
-@app.route('/temperature',methods=['GET'])
+
+
+@app.route('/temperature', methods=['GET'])
 async def temperature():
     '''Renders HTML for temperature page'''
     clock = await pclient.sys.get_clock()
     dt = datetime.datetime.now()
     spectrometers = await pclient.spec.get_spectrometers()
-    
-    return await render_template('temperature.html',
-                                 PiccoloSpectrometerStatus = PiccoloSpectrometerStatus,
-                                 clock = clock,
-                                 dt = dt,
-                                 spectrometers = spectrometers
-    )
 
-@app.route('/jobs',methods=['GET'])
+    return await render_template(
+        'temperature.html',
+        PiccoloSpectrometerStatus=PiccoloSpectrometerStatus,
+        clock=clock,
+        dt=dt,
+        spectrometers=spectrometers)
+
+
+@app.route('/jobs', methods=['GET'])
 async def jobs():
     """get list of scheduled jobs"""
 
     jobs = await pclient.scheduler.get_jobs()
     return jsonify(jobs)
 
-@app.route('/data',methods=['GET'])
+
+@app.route('/data', methods=['GET'])
 async def get_runs():
     '''return list of runs'''
 
-    current_run = request.args.get('current',default=0,type=int)
+    current_run = request.args.get('current', default=0, type=int)
 
     if current_run == 1:
         data = await pclient.data.get_current_run()
@@ -448,26 +462,28 @@ async def get_runs():
 
     return jsonify(data)
 
-@app.route('/data/<run>',methods=['GET'])
+
+@app.route('/data/<run>', methods=['GET'])
 async def get_run(run):
     '''return list of spectra'''
 
     if run not in pclient.data:
-        raise APIRequestException('no such run %s'%run)
+        raise APIRequestException(f'no such run {run}')
 
     data = await pclient.data[run].get_spectra_list()
 
     return jsonify(data)
 
-@app.route('/data/<run>/<spectra>',methods=['GET'])
-async def get_spectra(run,spectra):
+
+@app.route('/data/<run>/<spectra>', methods=['GET'])
+async def get_spectra(run, spectra):  # noqa: C901
     '''return list of spectra'''
 
-    data_type = request.args.get('data',default='raw')
-    
+    data_type = request.args.get('data', default='raw')
+
     if run not in pclient.data:
-        raise APIRequestException('no such run %s'%run)
-    
+        raise APIRequestException(f'no such run {run}')
+
     spectra = await pclient.data[run].get_spectra(spectra)
 
     if data_type == 'raw':
@@ -484,13 +500,15 @@ async def get_spectra(run,spectra):
                 directions = [d]
             data = []
             for d in directions:
-                for s in ['Dark','Light']:
-                    for spec in spectra.getSpectra(d,s):
+                for s in ['Dark', 'Light']:
+                    for spec in spectra.getSpectra(d, s):
                         xy = []
                         p = spec.pixels
                         w = spec.waveLengths
                         for i in range(len(p)):
-                            xy.append({'x':int(w[i]),'y':int(p[i])})
+                            xy.append(
+                                {'x': int(w[i]),
+                                 'y': int(p[i])})
                         sDict = spec.as_dict(pixelType='list')
                         sDict['plotList'] = xy
                         sDict['Directions'] = spectra.directions
@@ -498,25 +516,24 @@ async def get_spectra(run,spectra):
             return jsonify(data)
         elif data_type == 'directions':
             return jsonify(spectra.directions)
-        
-    raise APIRequestException('unknown request %s'%data_type)
+
+    raise APIRequestException(f'unknown request {data_type}')
+
 
 class APIRequestException(Exception):
     '''Exception class for API Exceptions
-    
-    Inherits from Exceptions    
-    
+
+    Inherits from Exceptions
+
     Use:
         raise APIRequestException('Error message', status_code=XXX)
-    
     '''
-    
+
     def __init__(self, message, status_code=400):
         '''
         Input Parameters:
             message (str) - Error message
             status_code (int) - (optional) status code of the occurred error
-        
         '''
         Exception.__init__(self)
         self.message = message
@@ -524,7 +541,7 @@ class APIRequestException(Exception):
 
     def to_dict(self):
         '''Converts the error message to a dictionnary
-        
+
         Returns:
             dict - a dictionnary of the Error
         '''
@@ -537,7 +554,7 @@ class APIRequestException(Exception):
 @app.errorhandler(APIRequestException)
 def handle_apiRequestException(error):
     '''error handler to handle the APIRequestException
-    
+
     Response:
         a JSON with information about the occurred Error
     '''
@@ -546,8 +563,14 @@ def handle_apiRequestException(error):
     return response
 
 
-
 if __name__ == '__main__':
     import uvicorn
 
-    uvicorn.run("app:app",host='0.0.0.0',port=8000,log_level='info',loop='asyncio',debug=True,workers=1,reload=False)
+    uvicorn.run("app:app",
+                host='0.0.0.0',
+                port=8000,
+                log_level='info',
+                loop='asyncio',
+                debug=True,
+                workers=1,
+                reload=False)

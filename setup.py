@@ -19,31 +19,29 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name = "piccolo3-web",
-    namespace_packages = ['piccolo3'],
-    packages = find_packages(),
+    name="piccolo3-web",
+    namespace_packages=['piccolo3'],
+    packages=find_packages(),
     use_scm_version=True,
-    setup_requires = [
+    setup_requires=[
         "pyqt-distutils",
-        'setuptools_scm'
-        ],
-    install_requires = [
+        'setuptools_scm'],
+    install_requires=[
         "numpy",
         "quart",
         "pytz",
         "configobj",
-        "uvicorn",
-    ],
+        "uvicorn"],
     entry_points={
         'gui_scripts': [
-            'piccolo3-web = piccolo3.app:main',
-        ],
-    },
+            'piccolo3-web = piccolo3.app:main']},
     include_package_data=True,
 
     # metadata for upload to PyPI
-    author = "Livia Jakob, Magnus Hagdorn, Alasdair MacArthur, Iain Robinson",
-    description = "Part of the piccolo3 system. This package provides a web GUI client",
-    license = "GPL",
-    url = "https://bitbucket.org/uoepiccolo/piccolo3-web",
+    author="Livia Jakob, Magnus Hagdorn, Alasdair MacArthur, Iain Robinson",
+    description="""Part of the piccolo3 system.
+
+This package provides a web GUI client""",
+    license="GPL",
+    url="https://github.com/TeamPiccolo/piccolo3-web",
 )
