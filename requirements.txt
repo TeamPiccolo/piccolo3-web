@@ -1,0 +1,7 @@
+setuptools_scm
+numpy
+quart==0.13.0
+pytz
+configobj
+uvicorn
+jinja2<3.1.0
