@@ -28,7 +28,7 @@ setup(
         'setuptools_scm'],
     install_requires=[
         "numpy",
-        "quart==0.13.0",
+        "quart==0.19.7",
         "pytz",
         "configobj",
         "uvicorn"],
